@@ -1,0 +1,6 @@
+@WCTV.Api_HostAddress = http://localhost:5296
+
+GET {{WCTV.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,2797 @@
+<!DOCTYPE html>
+<html lang="da"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WCTV Kravspecifikation - Klikbare Gherkin-krav</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="WCTV%20Kravspecifikation%20-%20Klikbare%20Gherkin-krav-filer/css2.css" rel="stylesheet">
+    <style>
+      :root {
+        --bg: #f3f6f5;
+        --card: #ffffff;
+        --text: #1a2524;
+        --muted: #556563;
+        --line: #d7e1de;
+        --primary: #0f766e;
+        --primary-soft: #dcf4f1;
+        --accent: #9a4f00;
+        --mono-bg: #f8fbfa;
+        --mono-line: #e3ece9;
+        --shadow: 0 12px 30px rgba(15, 118, 110, 0.1);
+        --radius: 14px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 8% 0%, #dcefeb 0%, transparent 35%),
+          radial-gradient(circle at 92% 8%, #fff1d9 0%, transparent 30%),
+          var(--bg);
+        line-height: 1.45;
+      }
+
+      .wrap {
+        width: min(1220px, 100% - 2rem);
+        margin: 2rem auto 3rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 1rem 1.2rem;
+      }
+
+      .hero {
+        border-left: 8px solid var(--primary);
+        padding: 1.25rem 1.35rem;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.2;
+      }
+
+      h1 {
+        font-size: clamp(1.45rem, 2.5vw, 2.05rem);
+      }
+
+      h2 {
+        font-size: 1.05rem;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .lead {
+        margin-top: 0.55rem;
+        max-width: 900px;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin-top: 0.65rem;
+      }
+
+      .chip {
+        font-size: 0.77rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        padding: 0.22rem 0.5rem;
+        border-radius: 999px;
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .grid-2 {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .note {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #f8fbfa;
+        padding: 0.7rem 0.8rem;
+      }
+
+      .note h3 {
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .content-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .compliance-list {
+        margin: 0.35rem 0 0;
+        padding-left: 1rem;
+        color: var(--muted);
+      }
+
+      .compliance-list li + li {
+        margin-top: 0.35rem;
+      }
+
+      .status-ok {
+        display: inline-block;
+        margin-left: 0.35rem;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.12rem 0.38rem;
+        border-radius: 999px;
+        background: #ddf4eb;
+        color: #15674a;
+        border: 1px solid #b8e2ce;
+      }
+
+      .ref-inline {
+        font-family: "IBM Plex Mono", Consolas, monospace;
+        font-size: 0.76rem;
+        color: #2a4b48;
+        background: #edf4f2;
+        border: 1px solid #d3e1dd;
+        border-radius: 6px;
+        padding: 0.06rem 0.28rem;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.7rem;
+        margin-bottom: 0.65rem;
+      }
+
+      .collapsible-card {
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .collapsible-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 1rem 1.2rem;
+      }
+
+      .collapsible-summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .collapsible-summary .section-title {
+        margin-bottom: 0;
+      }
+
+      .summary-right {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .collapse-hint {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #4a6460;
+        background: #edf4f2;
+        border: 1px solid #d2e1dd;
+        border-radius: 999px;
+        padding: 0.12rem 0.46rem;
+      }
+
+      .collapsible-card:not([open]) .collapse-hint::before {
+        content: "Vis detaljer";
+      }
+
+      .collapsible-card[open] .collapse-hint::before {
+        content: "Skjul detaljer";
+      }
+
+      .collapse-chevron {
+        font-size: 0.95rem;
+        color: #355a56;
+        transition: transform 200ms ease;
+      }
+
+      .collapsible-card[open] .collapse-chevron {
+        transform: rotate(180deg);
+      }
+
+      .collapsible-body {
+        border-top: 1px solid var(--line);
+        padding: 0.9rem 1.2rem 1.05rem;
+      }
+
+      .badge {
+        font-size: 0.74rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 700;
+        color: #385754;
+        background: #ecf3f2;
+        border-radius: 6px;
+        padding: 0.18rem 0.42rem;
+      }
+
+      .toolbar {
+        display: grid;
+        gap: 0.7rem;
+        margin: 0.2rem 0 0.9rem;
+      }
+
+      .filters {
+        display: flex;
+        gap: 0.45rem;
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        border: 1px solid #c5d7d3;
+        border-radius: 999px;
+        background: #f3f8f7;
+        color: #244341;
+        font-weight: 600;
+        font-size: 0.82rem;
+        padding: 0.34rem 0.68rem;
+        cursor: pointer;
+      }
+
+      .filter-btn.active {
+        border-color: var(--primary);
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .search-row {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+
+      .search-row input {
+        width: 100%;
+        border: 1px solid #c9d8d5;
+        border-radius: 10px;
+        padding: 0.55rem 0.62rem;
+        font-size: 0.9rem;
+        font-family: inherit;
+        color: var(--text);
+        background: #fff;
+      }
+
+      .search-row input:focus {
+        outline: 2px solid #bfe5df;
+        border-color: #88bfb7;
+      }
+
+      .count {
+        font-size: 0.82rem;
+        color: #47615d;
+        font-weight: 600;
+      }
+
+      .completion-report {
+        border: 1px solid #cfe0dc;
+        background: #f6fbfa;
+        border-radius: 10px;
+        padding: 0.6rem 0.72rem 0.68rem;
+        display: grid;
+        gap: 0.45rem;
+      }
+
+      .completion-main {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.6rem;
+      }
+
+      .completion-label {
+        font-size: 0.82rem;
+        color: #3a5552;
+        font-weight: 600;
+      }
+
+      .completion-value {
+        font-family: "IBM Plex Mono", Consolas, monospace;
+        font-size: 0.83rem;
+        color: #1f3a37;
+      }
+
+      .completion-progress {
+        width: 100%;
+        height: 8px;
+        border-radius: 999px;
+        background: #deece9;
+        overflow: hidden;
+      }
+
+      .completion-progress-bar {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #17877d, #30a39a);
+        transition: width 220ms ease;
+      }
+
+      .completion-breakdown {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+      }
+
+      .completion-chip {
+        font-size: 0.73rem;
+        font-weight: 700;
+        color: #355955;
+        background: #eaf4f2;
+        border: 1px solid #cfdfdc;
+        border-radius: 999px;
+        padding: 0.16rem 0.44rem;
+      }
+
+      .req-list {
+        display: grid;
+        gap: 0.55rem;
+      }
+
+      details.req {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        overflow: hidden;
+      }
+
+      details.req[open] {
+        border-color: #a9c9c2;
+        background: #fbfdfd;
+      }
+
+      summary.req-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 0.72rem 0.82rem;
+      }
+
+      summary.req-summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .req-head {
+        display: grid;
+        grid-template-columns: auto 1fr auto auto;
+        gap: 0.62rem;
+        align-items: center;
+      }
+
+      .req-id {
+        font-family: "IBM Plex Mono", Consolas, monospace;
+        font-size: 0.78rem;
+        border: 1px solid #c5d8d4;
+        border-radius: 7px;
+        padding: 0.16rem 0.34rem;
+        background: #f0f7f6;
+        color: #29504d;
+        font-weight: 600;
+      }
+
+      .req-title {
+        font-size: 0.91rem;
+        font-weight: 600;
+        color: #1b2d2b;
+      }
+
+      .req-type {
+        font-size: 0.72rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border-radius: 999px;
+        padding: 0.16rem 0.44rem;
+        background: #e8f3f1;
+        color: #315a56;
+        font-weight: 700;
+      }
+
+      .complete-control {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.32rem;
+        font-size: 0.75rem;
+        color: #345653;
+        background: #eef7f5;
+        border: 1px solid #caded9;
+        border-radius: 999px;
+        padding: 0.14rem 0.44rem;
+        user-select: none;
+      }
+
+      .complete-control input {
+        margin: 0;
+        width: 0.9rem;
+        height: 0.9rem;
+        accent-color: var(--primary);
+      }
+
+      .req-body {
+        border-top: 1px solid var(--line);
+        padding: 0.74rem 0.82rem 0.84rem;
+        display: grid;
+        gap: 0.6rem;
+      }
+
+      .view-toggle {
+        display: inline-flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .view-btn {
+        border: 1px solid #c7d8d5;
+        border-radius: 999px;
+        background: #f3f8f7;
+        color: #2c4c49;
+        font-size: 0.76rem;
+        font-weight: 700;
+        padding: 0.2rem 0.52rem;
+        cursor: pointer;
+      }
+
+      .view-btn.active {
+        border-color: var(--primary);
+        background: #dff2ef;
+        color: var(--primary);
+      }
+
+      .req-text {
+        font-size: 0.9rem;
+        color: #425452;
+      }
+
+      .gherkin {
+        margin: 0;
+        border: 1px solid var(--mono-line);
+        border-radius: 10px;
+        background: linear-gradient(180deg, #fcfefd, var(--mono-bg));
+        padding: 0.72rem 0.78rem;
+        white-space: pre-wrap;
+        font-size: 0.82rem;
+        line-height: 1.53;
+        color: #203130;
+        font-family: "IBM Plex Mono", Consolas, monospace;
+      }
+
+      details.req.done {
+        border-color: #9ec9bd;
+      }
+
+      details.req.done .req-id {
+        background: #e7f4ef;
+        border-color: #9ec9bd;
+      }
+
+      details.req.done .req-title {
+        color: #5f6f6d;
+        text-decoration: line-through;
+      }
+
+      .muted {
+        font-size: 0.84rem;
+        color: #5c6d6a;
+      }
+
+      .empty {
+        border: 1px dashed #b9ccc8;
+        border-radius: 10px;
+        padding: 0.9rem;
+        color: #4d6260;
+        background: #f7fbfa;
+      }
+
+      @media (max-width: 980px) {
+        .wrap {
+          width: min(1220px, 100% - 1rem);
+        }
+
+        .grid-2 {
+          grid-template-columns: 1fr;
+        }
+
+        .content-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .collapsible-summary,
+        .collapsible-body {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        .req-head {
+          grid-template-columns: auto 1fr;
+        }
+
+        .req-type {
+          justify-self: start;
+        }
+
+        .complete-control {
+          justify-self: end;
+        }
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        .wrap {
+          width: 100%;
+          margin: 0;
+        }
+
+        .card {
+          box-shadow: none;
+          break-inside: avoid;
+        }
+
+        .toolbar {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="card hero">
+        <h1>Kravspecifikation - WCTV</h1>
+        <p class="lead">
+          Hvert krav kan foldes ud separat. Når du klikker på et krav, får du en
+          mere specifik beskrivelse til brug for acceptkriterier og
+          testforberedelse.
+        </p>
+        <div class="meta">
+          <span class="chip">Version 0.3</span>
+          <span class="chip">Dato: 11. februar 2026</span>
+          <span class="chip">Format: Klikbart kravkatalog</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <h2>Projektbeskrivelse</h2>
+          <span class="badge">1.0</span>
+        </div>
+        <p>
+          WCTV (WC-TV) er et satirisk, men funktionelt adfærdsdesign-projekt,
+          der forbedrer toiletforholdene på Techcollege via realtids-overblik
+          og behovsbaseret rengøring. Systemet tager automatiske snapshots af
+          toiletternes tilstand før og efter hvert besøg og vurderer, om
+          toilettet er efterladt i samme acceptable stand. Der foregår ingen
+          live-overvågning, og systemet "ser tilstanden - ikke personen". Ved
+          forværring oprettes der en rengøringstrigger, og et live dashboard
+          giver drift og rengøring et klart overblik. Målet er færre klager,
+          hurtigere reaktion, bedre ressourceudnyttelse og vigtigst: ændret
+          elevadfærd og ansvarsfølelse.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <h2>Aktører</h2>
+          <span class="badge">1.1</span>
+        </div>
+        <div class="grid-2">
+          <article class="note">
+            <h3>Elev/Bruger</h3>
+            <p>
+              Scanner kort ved toilettet, bruger faciliteterne og påvirkes af
+              nudging.
+            </p>
+          </article>
+          <article class="note">
+            <h3>Rengøringsteam</h3>
+            <p>
+              Modtager trigger-lister og prioriterer indsatser ud fra
+              alvorlighed og alder.
+            </p>
+          </article>
+          <article class="note">
+            <h3>Drift/Faciliteter</h3>
+            <p>Følger realtidsstatus, trends og hotspots via dashboard.</p>
+          </article>
+          <article class="note">
+            <h3>Skoleledelse</h3>
+            <p>Bruger KPI-rapporter til styring og effektmåling.</p>
+          </article>
+        </div>
+      </section>
+
+      <details class="card collapsible-card">
+        <summary class="collapsible-summary">
+          <div class="section-title">
+            <h2>Indhold - kravspecifikationen</h2>
+            <div class="summary-right">
+              <span class="badge">Overholdelse</span>
+              <span class="collapse-hint" aria-hidden="true"></span>
+              <span class="collapse-chevron" aria-hidden="true">▾</span>
+            </div>
+          </div>
+        </summary>
+        <div class="collapsible-body">
+          <div class="content-grid" style="margin-top: 0.8rem">
+            <article class="note">
+              <h3>Generelt indhold af kravspecifikationen</h3>
+              <ul class="compliance-list">
+                <li>
+                  Grundlæggende krav
+                  <span class="status-ok">Opfyldt</span>
+                  via <span class="ref-inline">FR-01..FR-51</span> og
+                  <span class="ref-inline">NFR-01..NFR-06</span>.
+                </li>
+                <li>
+                  Systembeskrivelse
+                  <span class="status-ok">Opfyldt</span>
+                  via arkitektur, dataflow og aktørbeskrivelse.
+                </li>
+                <li>
+                  Systemets funktion
+                  <span class="status-ok">Opfyldt</span>
+                  via sessionsflow, snapshot, scoring, trigger og dashboard.
+                </li>
+                <li>
+                  Systemets begrænsninger
+                  <span class="status-ok">Opfyldt</span>
+                  via privacy-by-design, ingen live-feed og confidence/fallback.
+                </li>
+                <li>
+                  Systemets fremtid
+                  <span class="status-ok">Opfyldt</span>
+                  via næste iteration (MoSCoW, acceptkriterier, testcases).
+                </li>
+                <li>
+                  Brugerprofiler
+                  <span class="status-ok">Opfyldt</span>
+                  via elev, rengøringsteam, drift/faciliteter og skoleledelse.
+                </li>
+                <li>
+                  Krav til udviklingsforløbet
+                  <span class="status-ok">Opfyldt</span>
+                  gennem iterativ model med edge-robusthed, validering og
+                  governance.
+                </li>
+                <li>
+                  Omfang af leverancer
+                  <span class="status-ok">Opfyldt</span>
+                  via edge-komponenter, API, dashboard, logs og KPI-rapporter.
+                </li>
+                <li>
+                  Forudsætninger
+                  <span class="status-ok">Opfyldt</span>
+                  via kortscanner/kamera, netværk, device registry og
+                  adgangsroller.
+                </li>
+              </ul>
+            </article>
+
+            <article class="note">
+              <h3>Kravtyper</h3>
+              <ul class="compliance-list">
+                <li>
+                  Eksterne grænsefladekrav
+                  <span class="status-ok">Opfyldt</span>
+                  gennem integrationer til kortscanner, kamera, API og push-hub.
+                </li>
+                <li>
+                  Krav til ydelse
+                  <span class="status-ok">Opfyldt</span>
+                  via næsten realtidsopdatering og responstids-KPI'er.
+                </li>
+                <li>
+                  Funktionelle krav
+                  <span class="status-ok">Opfyldt</span>
+                  via hele FR-kataloget.
+                </li>
+                <li>
+                  Ikke-funktionelle krav
+                  <span class="status-ok">Opfyldt</span>
+                  via hele NFR-kataloget.
+                </li>
+                <li>
+                  Skal-krav (mandatory)
+                  <span class="status-ok">Opfyldt</span>
+                  defineret som alle FR/NFR samt centrale drifts-KPI'er.
+                </li>
+                <li>
+                  Bør-krav (optional)
+                  <span class="status-ok">Opfyldt</span>
+                  defineret som etiske/analytiske udvidelser som
+                  <span class="ref-inline">KPI-A3</span> og satirelag i
+                  microcopy.
+                </li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+
+      <section class="card">
+        <div class="section-title">
+          <h2>Kravkatalog</h2>
+          <span class="badge" id="reqCountBadge">32 krav</span>
+        </div>
+
+        <div class="toolbar">
+          <div class="filters" role="tablist" aria-label="Kravfiltre">
+            <button class="filter-btn active" data-filter="ALL" type="button">
+              Alle
+            </button>
+            <button class="filter-btn" data-filter="FR" type="button">
+              FR
+            </button>
+            <button class="filter-btn" data-filter="NFR" type="button">
+              NFR
+            </button>
+            <button class="filter-btn" data-filter="KPI" type="button">
+              KPI
+            </button>
+          </div>
+          <div class="search-row">
+            <input id="searchInput" type="search" placeholder="Søg efter ID, kategori, titel eller tekst (fx FR-21, okklusion, dashboard)">
+            <span class="count" id="resultCount">32 resultater</span>
+          </div>
+          <div class="completion-report" role="status" aria-live="polite">
+            <div class="completion-main">
+              <span class="completion-label">Gennemførelsesrapport</span>
+              <strong class="completion-value" id="completionOverall">0/32 (0%)</strong>
+            </div>
+            <div class="completion-progress" aria-hidden="true">
+              <span class="completion-progress-bar" id="completionProgressBar" style="width: 0%;"></span>
+            </div>
+            <div class="completion-breakdown">
+              <span class="completion-chip" id="completionFR">FR: 0/15</span>
+              <span class="completion-chip" id="completionNFR">NFR: 0/6</span>
+              <span class="completion-chip" id="completionKPI">KPI: 0/11</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="requirements" class="req-list" aria-live="polite">
+              <details class="req" data-id="FR-01">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-01</span>
+                    <span class="req-title">Start anonym besøgs-session</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-01" aria-label="Marker FR-01 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Adgang &amp; session</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal starte en anonym besøgs-session ved kortscan.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-01">
+                    <button type="button" class="view-btn active" data-id="FR-01" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-01" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Start anonym besøgs-session
+  Scenarie: Kortscan starter session
+    Givet en bruger scanner sit kort ved toilettet
+    Når scan-eventet valideres af edge-enheden
+    Så systemet opretter en anonym session
+    Og sessionstatus sættes til aktiv</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Start anonym besøgs-session
+  Scenarie: Kortscan starter session
+    Forudsætning: en bruger scanner sit kort ved toilettet
+    Handling: scan-eventet valideres af edge-enheden
+    Forventet resultat: systemet opretter en anonym session
+    Supplerende krav: sessionstatus sættes til aktiv</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-02">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-02</span>
+                    <span class="req-title">Knyt session til toilet og tid</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-02" aria-label="Marker FR-02 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Adgang &amp; session</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal knytte sessionen til toilet-ID og tidsstempel.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-02">
+                    <button type="button" class="view-btn active" data-id="FR-02" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-02" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Sessionsmetadata
+  Scenarie: Ny session gemmes med kontekst
+    Givet en ny anonym session er oprettet
+    Når sessionmetadata persisteres
+    Så sessionen indeholder toilet-id
+    Og sessionen indeholder tidsstempel</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Sessionsmetadata
+  Scenarie: Ny session gemmes med kontekst
+    Forudsætning: en ny anonym session er oprettet
+    Handling: sessionmetadata persisteres
+    Forventet resultat: sessionen indeholder toilet-id
+    Supplerende krav: sessionen indeholder tidsstempel</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-03">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-03</span>
+                    <span class="req-title">Afslut session via exit-event</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-03" aria-label="Marker FR-03 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Adgang &amp; session</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal afslutte session ved kortscan ud, timeout eller dørsensor.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-03">
+                    <button type="button" class="view-btn active" data-id="FR-03" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-03" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Afslutning af session
+  Scenarie-skabelon: Exit-event lukker aktiv session
+    Givet der findes en aktiv session
+    Når systemet modtager &lt;exitHændelse&gt;
+    Så sessionen afsluttes
+
+    Eksempler:
+      | exitHændelse |
+      | kortscan ud  |
+      | timeout      |
+      | dørsensor    |</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Afslutning af session
+  Datadrevet scenarie: Exit-event lukker aktiv session
+    Forudsætning: der findes en aktiv session
+    Handling: systemet modtager &lt;exitHændelse&gt;
+    Forventet resultat: sessionen afsluttes
+
+    Datavarianter:
+      | exitHændelse |
+      | kortscan ud  |
+      | timeout      |
+      | dørsensor    |</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-10">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-10</span>
+                    <span class="req-title">Tag før-snapshot</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-10" aria-label="Marker FR-10 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Snapshots</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal tage et før-snapshot ved session start.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-10">
+                    <button type="button" class="view-btn active" data-id="FR-10" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-10" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Snapshot ved start
+  Scenarie: Tag før-snapshot
+    Givet en session netop er startet
+    Når snapshot-service er klar
+    Så systemet tager før-snapshot</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Snapshot ved start
+  Scenarie: Tag før-snapshot
+    Forudsætning: en session netop er startet
+    Handling: snapshot-service er klar
+    Forventet resultat: systemet tager før-snapshot</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-11">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-11</span>
+                    <span class="req-title">Tag efter-snapshot</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-11" aria-label="Marker FR-11 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Snapshots</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal tage et efter-snapshot ved session slut.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-11">
+                    <button type="button" class="view-btn active" data-id="FR-11" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-11" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Snapshot ved slut
+  Scenarie: Tag efter-snapshot
+    Givet en aktiv session afsluttes
+    Når exit-event er bekræftet
+    Så systemet tager efter-snapshot</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Snapshot ved slut
+  Scenarie: Tag efter-snapshot
+    Forudsætning: en aktiv session afsluttes
+    Handling: exit-event er bekræftet
+    Forventet resultat: systemet tager efter-snapshot</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-12">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-12</span>
+                    <span class="req-title">Ingen direkte feed adgang</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-12" aria-label="Marker FR-12 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Snapshots</p>
+                  <p class="req-text"><strong>Krav:</strong> Snapshots må ikke kunne tilgås som direkte feed.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-12">
+                    <button type="button" class="view-btn active" data-id="FR-12" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-12" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Ingen live-overvågning
+  Scenarie: Bloker forsøg på direkte videostrøm
+    Givet snapshots eksisterer for et toilet
+    Når en klient anmoder om kontinuerligt kamera-feed
+    Så anmodningen afvises</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Ingen live-overvågning
+  Scenarie: Bloker forsøg på direkte videostrøm
+    Forudsætning: snapshots eksisterer for et toilet
+    Handling: en klient anmoder om kontinuerligt kamera-feed
+    Forventet resultat: anmodningen afvises</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-20">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-20</span>
+                    <span class="req-title">Beregn før/efter score</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-20" aria-label="Marker FR-20 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Vurdering</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal beregne tilstandsscore før og efter besøg.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-20">
+                    <button type="button" class="view-btn active" data-id="FR-20" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-20" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Scoring af tilstand
+  Scenarie: Beregn score baseret på keypoints
+    Givet før- og eftersnapshot er tilgængelige
+    Når CV-pipeline udtrækker keypoints
+    Så systemet beregner førScore
+    Og systemet beregner efterScore</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Scoring af tilstand
+  Scenarie: Beregn score baseret på keypoints
+    Forudsætning: før- og eftersnapshot er tilgængelige
+    Handling: CV-pipeline udtrækker keypoints
+    Forventet resultat: systemet beregner førScore
+    Supplerende krav: systemet beregner efterScore</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-21">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-21</span>
+                    <span class="req-title">Sammenlign med acceptable variationer</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-21" aria-label="Marker FR-21 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Vurdering</p>
+                  <p class="req-text"><strong>Krav:</strong> 
+Skraldespand ignoreres/normaliseres, WC-bræt accepteres i tre tilladte 
+positioner, øvrige keypoints skal være samme eller bedre.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-21">
+                    <button type="button" class="view-btn active" data-id="FR-21" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-21" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Regler for acceptable variationer
+  Scenarie: Evaluer før/efter med undtagelser
+    Givet før- og efterscore er beregnet
+    Når regelmotor sammenligner keypoints
+    Så ændringer ved skraldespand ignoreres eller normaliseres
+    Og WC-bræt accepteres i tre tilladte positioner
+    Og øvrige keypoints skal være samme eller bedre</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Regler for acceptable variationer
+  Scenarie: Evaluer før/efter med undtagelser
+    Forudsætning: før- og efterscore er beregnet
+    Handling: regelmotor sammenligner keypoints
+    Forventet resultat: ændringer ved skraldespand ignoreres eller normaliseres
+    Supplerende krav: WC-bræt accepteres i tre tilladte positioner
+    Supplerende krav: øvrige keypoints skal være samme eller bedre</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-22">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-22</span>
+                    <span class="req-title">Klassificer resultat</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-22" aria-label="Marker FR-22 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Vurdering</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal klassificere resultatet som OK, let forværring, forværring eller ugyldigt.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-22">
+                    <button type="button" class="view-btn active" data-id="FR-22" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-22" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Klassifikation af resultat
+  Scenarie-skabelon: Klassificer baseret på ændring og sikkerhedsscore
+    Givet sammenligningen er udført
+    Når systemet evaluerer tærskel og sikkerhedsscore
+    Så resultat sættes til &lt;status&gt;
+
+    Eksempler:
+      | status         |
+      | OK             |
+      | let_forværring|
+      | forvaerring    |
+      | ugyldig        |</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Klassifikation af resultat
+  Datadrevet scenarie: Klassificer baseret på ændring og sikkerhedsscore
+    Forudsætning: sammenligningen er udført
+    Handling: systemet evaluerer tærskel og sikkerhedsscore
+    Forventet resultat: resultat sættes til &lt;status&gt;
+
+    Datavarianter:
+      | status         |
+      | OK             |
+      | let_forværring|
+      | forvaerring    |
+      | ugyldig        |</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-30">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-30</span>
+                    <span class="req-title">Opret rengøringstrigger</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-30" aria-label="Marker FR-30 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Triggers</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal oprette rengøringstrigger ved forværring.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-30">
+                    <button type="button" class="view-btn active" data-id="FR-30" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-30" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Trigger-oprettelse
+  Scenarie: Forværring opretter trigger
+    Givet et resultat er klassificeret som forværring
+    Når vurderingen gemmes
+    Så systemet opretter en rengøringstrigger</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Trigger-oprettelse
+  Scenarie: Forværring opretter trigger
+    Forudsætning: et resultat er klassificeret som forværring
+    Handling: vurderingen gemmes
+    Forventet resultat: systemet opretter en rengøringstrigger</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-31">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-31</span>
+                    <span class="req-title">Trigger indeholder obligatoriske felter</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-31" aria-label="Marker FR-31 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Triggers</p>
+                  <p class="req-text"><strong>Krav:</strong> Trigger skal indeholde toilet-ID, alvorlighed, tidsstempel, metadata om ændringer og sikkerhedsscore.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-31">
+                    <button type="button" class="view-btn active" data-id="FR-31" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-31" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Triggerindhold
+  Scenarie: Gem komplet trigger-information
+    Givet en trigger er oprettet
+    Når triggerdata persisteres
+    Så trigger indeholder toilet-id
+    Og trigger indeholder alvorlighed
+    Og trigger indeholder tidsstempel
+    Og trigger indeholder ændringsmetadata
+    Og trigger indeholder sikkerhedsscore</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Triggerindhold
+  Scenarie: Gem komplet trigger-information
+    Forudsætning: en trigger er oprettet
+    Handling: triggerdata persisteres
+    Forventet resultat: trigger indeholder toilet-id
+    Supplerende krav: trigger indeholder alvorlighed
+    Supplerende krav: trigger indeholder tidsstempel
+    Supplerende krav: trigger indeholder ændringsmetadata
+    Supplerende krav: trigger indeholder sikkerhedsscore</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-40">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-40</span>
+                    <span class="req-title">Push-opdatering i næsten realtid</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-40" aria-label="Marker FR-40 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Dashboard</p>
+                  <p class="req-text"><strong>Krav:</strong> Dashboard skal opdateres i næsten realtid via push.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-40">
+                    <button type="button" class="view-btn active" data-id="FR-40" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-40" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Realtidsopdatering af dashboard
+  Scenarie: Ændringer pushes til klienter
+    Givet aktuel tilstand eller triggers ændres
+    Når serverens push-hub udsender opdatering
+    Så tilsluttede dashboardklienter modtager opdateringen i næsten realtid</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Realtidsopdatering af dashboard
+  Scenarie: Ændringer pushes til klienter
+    Forudsætning: aktuel tilstand eller triggers ændres
+    Handling: serverens push-hub udsender opdatering
+    Forventet resultat: tilsluttede dashboardklienter modtager opdateringen i næsten realtid</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-41">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-41</span>
+                    <span class="req-title">Vis aktuel tilstand og aktive triggers</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-41" aria-label="Marker FR-41 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Dashboard</p>
+                  <p class="req-text"><strong>Krav:</strong> Dashboard skal vise aktuel tilstand pr. toilet og aktive triggers.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-41">
+                    <button type="button" class="view-btn active" data-id="FR-41" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-41" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Realtidsoverblik pr. toilet
+  Scenarie: Åbn dashboardets forside
+    Givet en bruger har adgang til dashboard
+    Når forside-data indlæses
+    Så aktuel tilstand vises for hvert toilet
+    Og aktive triggers vises med prioritering</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Realtidsoverblik pr. toilet
+  Scenarie: Åbn dashboardets forside
+    Forudsætning: en bruger har adgang til dashboard
+    Handling: forside-data indlæses
+    Forventet resultat: aktuel tilstand vises for hvert toilet
+    Supplerende krav: aktive triggers vises med prioritering</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-50">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-50</span>
+                    <span class="req-title">Log centrale events</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-50" aria-label="Marker FR-50 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Audit &amp; logs</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal logge scan, snapshots, score, trigger og rengøringskvittering.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-50">
+                    <button type="button" class="view-btn active" data-id="FR-50" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-50" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Auditerbar eventlog
+  Scenarie: Persistér alle kritiske events
+    Givet systemkomponenter udsender events
+    Når et event modtages i modtagelseslaget
+    Så eventlog gemmer scan-event
+    Og eventlog gemmer snapshot-event
+    Og eventlog gemmer score-event
+    Og eventlog gemmer trigger-event
+    Og eventlog gemmer rengøringskvittering</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Auditerbar eventlog
+  Scenarie: Persistér alle kritiske events
+    Forudsætning: systemkomponenter udsender events
+    Handling: et event modtages i modtagelseslaget
+    Forventet resultat: eventlog gemmer scan-event
+    Supplerende krav: eventlog gemmer snapshot-event
+    Supplerende krav: eventlog gemmer score-event
+    Supplerende krav: eventlog gemmer trigger-event
+    Supplerende krav: eventlog gemmer rengøringskvittering</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="FR-51">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">FR-51</span>
+                    <span class="req-title">Eksport af KPI-rapporter</span>
+                    <span class="req-type">FR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="FR-51" aria-label="Marker FR-51 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Audit &amp; logs</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal kunne eksportere KPI-data pr. uge og måned.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav FR-51">
+                    <button type="button" class="view-btn active" data-id="FR-51" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="FR-51" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Rapporteksport
+  Scenarie-skabelon: Eksportér rapportdata for periode
+    Givet KPI-data er aggregeret
+    Når en bruger anmoder om eksport for &lt;periode&gt;
+    Så systemet genererer en eksportfil med KPI-data
+
+    Eksempler:
+      | periode |
+      | uge     |
+      | måned   |</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Rapporteksport
+  Datadrevet scenarie: Eksportér rapportdata for periode
+    Forudsætning: KPI-data er aggregeret
+    Handling: en bruger anmoder om eksport for &lt;periode&gt;
+    Forventet resultat: systemet genererer en eksportfil med KPI-data
+
+    Datavarianter:
+      | periode |
+      | uge     |
+      | måned   |</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="NFR-01">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">NFR-01</span>
+                    <span class="req-title">Ingen personidentifikation i serverdata</span>
+                    <span class="req-type">NFR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="NFR-01" aria-label="Marker NFR-01 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Privacy</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal implementere privacy-by-design uden personidentifikation.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav NFR-01">
+                    <button type="button" class="view-btn active" data-id="NFR-01" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="NFR-01" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Privatliv som standard
+  Scenarie: Fjern personhenførbare data fra server-datapakke
+    Givet edge-enheden behandler snapshots
+    Når metadata sendes til server
+    Så datapakke indeholder ingen personidentificerende felter</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Privatliv som standard
+  Scenarie: Fjern personhenførbare data fra server-datapakke
+    Forudsætning: edge-enheden behandler snapshots
+    Handling: metadata sendes til server
+    Forventet resultat: datapakke indeholder ingen personidentificerende felter</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="NFR-02">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">NFR-02</span>
+                    <span class="req-title">Kun metadata sendes</span>
+                    <span class="req-type">NFR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="NFR-02" aria-label="Marker NFR-02 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Edge-først</p>
+                  <p class="req-text"><strong>Krav:</strong> Billeder behandles lokalt og kun metadata sendes videre.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav NFR-02">
+                    <button type="button" class="view-btn active" data-id="NFR-02" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="NFR-02" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Lokal behandling på edge
+  Scenarie: Lokal billedbehandling
+    Givet rå billeder opfanges på edge
+    Når udtræk af nøglepunkter udføres
+    Så billedbehandling sker lokalt
+    Og kun metadata transmitteres til server</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Lokal behandling på edge
+  Scenarie: Lokal billedbehandling
+    Forudsætning: rå billeder opfanges på edge
+    Handling: udtræk af nøglepunkter udføres
+    Forventet resultat: billedbehandling sker lokalt
+    Supplerende krav: kun metadata transmitteres til server</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="NFR-03">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">NFR-03</span>
+                    <span class="req-title">Drift ved netværksudfald</span>
+                    <span class="req-type">NFR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="NFR-03" aria-label="Marker NFR-03 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Robusthed</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal fortsætte drift ved udfald og buffer data lokalt.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav NFR-03">
+                    <button type="button" class="view-btn active" data-id="NFR-03" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="NFR-03" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Offline robusthed
+  Scenarie: Netværket går ned under drift
+    Givet edge-enheden producerer events
+    Når netværksforbindelsen er utilgængelig
+    Så events placeres i lokal queue
+    Og events synkroniseres når forbindelsen returnerer</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Offline robusthed
+  Scenarie: Netværket går ned under drift
+    Forudsætning: edge-enheden producerer events
+    Handling: netværksforbindelsen er utilgængelig
+    Forventet resultat: events placeres i lokal queue
+    Supplerende krav: events synkroniseres når forbindelsen returnerer</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="NFR-04">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">NFR-04</span>
+                    <span class="req-title">Kryptering, hardening og adgangsstyring</span>
+                    <span class="req-type">NFR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="NFR-04" aria-label="Marker NFR-04 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Sikkerhed</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal beskytte data i transit, hardene edge-enhed og styre dashboard-adgang.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav NFR-04">
+                    <button type="button" class="view-btn active" data-id="NFR-04" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="NFR-04" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Sikkerhedsbaseline
+  Scenarie: Beskyt data og adgang
+    Givet data flyder mellem edge, API og dashboard
+    Når sikkerhedskrav håndhæves
+    Så trafik er krypteret i transit
+    Og edge-enheden er hardenet
+    Og dashboard kræver rollebaseret adgang</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Sikkerhedsbaseline
+  Scenarie: Beskyt data og adgang
+    Forudsætning: data flyder mellem edge, API og dashboard
+    Handling: sikkerhedskrav håndhæves
+    Forventet resultat: trafik er krypteret i transit
+    Supplerende krav: edge-enheden er hardenet
+    Supplerende krav: dashboard kræver rollebaseret adgang</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="NFR-05">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">NFR-05</span>
+                    <span class="req-title">Tydelig skiltning</span>
+                    <span class="req-type">NFR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="NFR-05" aria-label="Marker NFR-05 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Transparens</p>
+                  <p class="req-text"><strong>Krav:</strong> Brugere skal informeres om snapshots, ikke direkte feed og ikke personfokus.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav NFR-05">
+                    <button type="button" class="view-btn active" data-id="NFR-05" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="NFR-05" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Transparent kommunikation
+  Scenarie: Brugere møder systemet fysisk
+    Givet brugere ankommer til toiletområde
+    Når skiltning vises
+    Så skiltning forklarer snapshots frem for live-overvågning
+    Og skiltning forklarer fokus på tilstand frem for person</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Transparent kommunikation
+  Scenarie: Brugere møder systemet fysisk
+    Forudsætning: brugere ankommer til toiletområde
+    Handling: skiltning vises
+    Forventet resultat: skiltning forklarer snapshots frem for live-overvågning
+    Supplerende krav: skiltning forklarer fokus på tilstand frem for person</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="NFR-06">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">NFR-06</span>
+                    <span class="req-title">Håndtering af usikker klassifikation</span>
+                    <span class="req-type">NFR</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="NFR-06" aria-label="Marker NFR-06 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Bias/fejl</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal håndtere occlusion og fejlklassifikation via sikkerhedsscore og fallback.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav NFR-06">
+                    <button type="button" class="view-btn active" data-id="NFR-06" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="NFR-06" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Fejl- og usikkerhedshåndtering
+  Scenarie: Sikkerhedsscore er for lav
+    Givet klassifikationen har lav sikkerhedsscore
+    Når resultatet vurderes som usikkert
+    Så systemet markerer resultat som kræver_gennemgang
+    Og fallbackforløb aktiveres</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Fejl- og usikkerhedshåndtering
+  Scenarie: Sikkerhedsscore er for lav
+    Forudsætning: klassifikationen har lav sikkerhedsscore
+    Handling: resultatet vurderes som usikkert
+    Forventet resultat: systemet markerer resultat som kræver_gennemgang
+    Supplerende krav: fallbackforløb aktiveres</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-O1">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-O1</span>
+                    <span class="req-title">Klager pr. uge</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-O1" aria-label="Marker KPI-O1 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Effekt</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal måle udviklingen i antal klager pr. uge (mål: ned).</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-O1">
+                    <button type="button" class="view-btn active" data-id="KPI-O1" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-O1" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Effekt måling - klager
+  Scenarie: Ugentlig opgørelse af klager
+    Givet klagedata er tilgængelig for ugen
+    Når KPI-job køres
+    Så KPI-O1 beregnes og lagres
+    Og trendretning kan aflæses over tid</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Effekt måling - klager
+  Scenarie: Ugentlig opgørelse af klager
+    Forudsætning: klagedata er tilgængelig for ugen
+    Handling: KPI-job køres
+    Forventet resultat: KPI-O1 beregnes og lagres
+    Supplerende krav: trendretning kan aflæses over tid</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-O2">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-O2</span>
+                    <span class="req-title">Forværring-rate pr. 100 besøg</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-O2" aria-label="Marker KPI-O2 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Effekt</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal måle forværring-rate pr. 100 besøg (mål: ned).</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-O2">
+                    <button type="button" class="view-btn active" data-id="KPI-O2" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-O2" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Effekt måling - forværring-rate
+  Scenarie: Beregn rate pr. 100 besøg
+    Givet antal besøg og antal forværringer er kendt
+    Når KPI beregnes
+    Så KPI-O2 = (forværringer / besøg) * 100</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Effekt måling - forværring-rate
+  Scenarie: Beregn rate pr. 100 besøg
+    Forudsætning: antal besøg og antal forværringer er kendt
+    Handling: KPI beregnes
+    Forventet resultat: KPI-O2 = (forværringer / besøg) * 100</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-O3">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-O3</span>
+                    <span class="req-title">Responstid fra forværring til kvittering</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-O3" aria-label="Marker KPI-O3 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Effekt</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal måle gennemsnitlig tid fra forværring til rengøringskvittering (mål: ned).</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-O3">
+                    <button type="button" class="view-btn active" data-id="KPI-O3" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-O3" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Effekt måling - responstid
+  Scenarie: Beregn gennemsnitlig responstid
+    Givet trigger-oprettelser og kvitteringstidspunkter er logget
+    Når KPI-O3 beregnes
+    Så gennemsnitlig tid fra trigger til kvittering lagres</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Effekt måling - responstid
+  Scenarie: Beregn gennemsnitlig responstid
+    Forudsætning: trigger-oprettelser og kvitteringstidspunkter er logget
+    Handling: KPI-O3 beregnes
+    Forventet resultat: gennemsnitlig tid fra trigger til kvittering lagres</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-O4">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-O4</span>
+                    <span class="req-title">Andel toiletter i OK-tilstand</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-O4" aria-label="Marker KPI-O4 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Effekt</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal måle andel toiletter i OK aktuel tilstand i åbningstiden (mål: op).</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-O4">
+                    <button type="button" class="view-btn active" data-id="KPI-O4" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-O4" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Effekt måling - OK andel
+  Scenarie: Beregn andel i OK-tilstand
+    Givet snapshots af aktuel tilstand over åbningstiden er tilgængelige
+    Når KPI-O4 aggregeres
+    Så andelen af toiletter i OK-tilstand beregnes og rapporteres</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Effekt måling - OK andel
+  Scenarie: Beregn andel i OK-tilstand
+    Forudsætning: snapshots af aktuel tilstand over åbningstiden er tilgængelige
+    Handling: KPI-O4 aggregeres
+    Forventet resultat: andelen af toiletter i OK-tilstand beregnes og rapporteres</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-P1">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-P1</span>
+                    <span class="req-title">Triggers pr. dag og lokation</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-P1" aria-label="Marker KPI-P1 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Drift</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal måle antal triggers pr. dag og pr. lokation.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-P1">
+                    <button type="button" class="view-btn active" data-id="KPI-P1" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-P1" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Drift måling - trigger volumen
+  Scenarie: Opgør triggers pr. dag/lokation
+    Givet trigger-events er logget med lokation
+    Når daglig aggregering køres
+    Så KPI-P1 rapporterer triggerantal pr. lokation</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Drift måling - trigger volumen
+  Scenarie: Opgør triggers pr. dag/lokation
+    Forudsætning: trigger-events er logget med lokation
+    Handling: daglig aggregering køres
+    Forventet resultat: KPI-P1 rapporterer triggerantal pr. lokation</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-P2">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-P2</span>
+                    <span class="req-title">False positive rate</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-P2" aria-label="Marker KPI-P2 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Drift</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal måle andel falske alarmer.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-P2">
+                    <button type="button" class="view-btn active" data-id="KPI-P2" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-P2" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Drift måling - falske positiver
+  Scenarie: Beregn falsk alarm rate
+    Givet triggers kan markeres som falsk alarm
+    Når KPI-P2 beregnes
+    Så falsk alarm-rate rapporteres for valgt periode</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Drift måling - falske positiver
+  Scenarie: Beregn falsk alarm rate
+    Forudsætning: triggers kan markeres som falsk alarm
+    Handling: KPI-P2 beregnes
+    Forventet resultat: falsk alarm-rate rapporteres for valgt periode</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-P3">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-P3</span>
+                    <span class="req-title">Dækning af før/efter-snapshots</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-P3" aria-label="Marker KPI-P3 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Drift</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal måle andel sessions med både før- og eftersnapshot (mål: høj).</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-P3">
+                    <button type="button" class="view-btn active" data-id="KPI-P3" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-P3" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Drift måling - dækning
+  Scenarie: Opgør sessionsdækning
+    Givet sessions er logget
+    Når KPI-P3 beregnes
+    Så andelen med både før- og efter-snapshot rapporteres</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Drift måling - dækning
+  Scenarie: Opgør sessionsdækning
+    Forudsætning: sessions er logget
+    Handling: KPI-P3 beregnes
+    Forventet resultat: andelen med både før- og efter-snapshot rapporteres</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-P4">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-P4</span>
+                    <span class="req-title">Oppetid pr. edge-enhed</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-P4" aria-label="Marker KPI-P4 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Drift</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal måle oppetid pr. edge-enhed (mål: høj).</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-P4">
+                    <button type="button" class="view-btn active" data-id="KPI-P4" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-P4" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Drift måling - edge stabilitet
+  Scenarie: Beregn uptime pr. edge-enhed
+    Givet heartbeat-data indsamles fra enheder
+    Når KPI-P4 beregnes
+    Så oppetidsprocent rapporteres pr. enhed</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Drift måling - edge stabilitet
+  Scenarie: Beregn uptime pr. edge-enhed
+    Forudsætning: heartbeat-data indsamles fra enheder
+    Handling: KPI-P4 beregnes
+    Forventet resultat: oppetidsprocent rapporteres pr. enhed</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-A1">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-A1</span>
+                    <span class="req-title">Recidiv-frekvens pr. toilet/tidsrum</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-A1" aria-label="Marker KPI-A1 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Adfærd</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal måle recidiv-frekvens pr. toilet og tidsrum uden personidentifikation.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-A1">
+                    <button type="button" class="view-btn active" data-id="KPI-A1" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-A1" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Adfærdsmåling - recidiv
+  Scenarie: Identificér problemtidspunkter anonymt
+    Givet anonymt aggregerede hændelser pr. toilet og tidsblok
+    Når KPI-A1 udregnes
+    Så recidiv-frekvens rapporteres uden persondata</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Adfærdsmåling - recidiv
+  Scenarie: Identificér problemtidspunkter anonymt
+    Forudsætning: anonymt aggregerede hændelser pr. toilet og tidsblok
+    Handling: KPI-A1 udregnes
+    Forventet resultat: recidiv-frekvens rapporteres uden persondata</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-A2">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-A2</span>
+                    <span class="req-title">Før/efter kampagne-effekt</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-A2" aria-label="Marker KPI-A2 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Adfærd</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet skal måle forværring-rate før og efter nudging-kampagner.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-A2">
+                    <button type="button" class="view-btn active" data-id="KPI-A2" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-A2" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Adfærdsmåling - kampagneeffekt
+  Scenarie: Sammenlign før- og efterperiode
+    Givet kampagneperioder er markeret i datasættet
+    Når KPI-A2 beregnes
+    Så forværring-rate før mod efter sammenlignes</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Adfærdsmåling - kampagneeffekt
+  Scenarie: Sammenlign før- og efterperiode
+    Forudsætning: kampagneperioder er markeret i datasættet
+    Handling: KPI-A2 beregnes
+    Forventet resultat: forværring-rate før mod efter sammenlignes</pre>
+                </div>
+              </details>
+            
+              <details class="req" data-id="KPI-A3">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">KPI-A3</span>
+                    <span class="req-title">Rate pr. hold/område (etisk betinget)</span>
+                    <span class="req-type">KPI</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input type="checkbox" class="req-complete" data-id="KPI-A3" aria-label="Marker KPI-A3 som gennemført">
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> Adfærd</p>
+                  <p class="req-text"><strong>Krav:</strong> Systemet kan måle forværring-rate pr. hold/område, kun hvis anonymt aggregérbart og etisk godkendt.</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav KPI-A3">
+                    <button type="button" class="view-btn active" data-id="KPI-A3" data-view="gherkin">
+                      Gherkin
+                    </button>
+                    <button type="button" class="view-btn" data-id="KPI-A3" data-view="formal">
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view">Egenskab: Adfærdsmåling - segmenteret analyse
+  Scenarie: Beregn segmenteret rate under etiske rammer
+    Givet anonym aggregering er mulig for hold eller område
+    Og etisk godkendelse foreligger
+    Når KPI-A3 beregnes
+    Så forværring-rate pr. segment rapporteres</pre>
+                  <pre class="gherkin formal-view" hidden="">Forretningsregel: Adfærdsmåling - segmenteret analyse
+  Scenarie: Beregn segmenteret rate under etiske rammer
+    Forudsætning: anonym aggregering er mulig for hold eller område
+    Supplerende krav: etisk godkendelse foreligger
+    Handling: KPI-A3 beregnes
+    Forventet resultat: forværring-rate pr. segment rapporteres</pre>
+                </div>
+              </details>
+            </div>
+        <div id="noResults" class="empty" hidden="">
+          Ingen krav matcher din filtrering.
+        </div>
+        <p class="muted" style="margin-top: 0.8rem">
+          Tip: Brug filtrene til at vise kun FR/NFR/KPI og klik på et krav-ID
+          for at se kravdetaljer. Inde i hver ekspander kan du skifte mellem
+          Gherkin og Formelt BDD.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const requirements = [
+        {
+          id: "FR-01",
+          group: "FR",
+          area: "Adgang & session",
+          title: "Start anonym besøgs-session",
+          requirement:
+            "Systemet skal starte en anonym besøgs-session ved kortscan.",
+          gherkin: `Egenskab: Start anonym besøgs-session
+  Scenarie: Kortscan starter session
+    Givet en bruger scanner sit kort ved toilettet
+    Når scan-eventet valideres af edge-enheden
+    Så systemet opretter en anonym session
+    Og sessionstatus sættes til aktiv`,
+        },
+        {
+          id: "FR-02",
+          group: "FR",
+          area: "Adgang & session",
+          title: "Knyt session til toilet og tid",
+          requirement:
+            "Systemet skal knytte sessionen til toilet-ID og tidsstempel.",
+          gherkin: `Egenskab: Sessionsmetadata
+  Scenarie: Ny session gemmes med kontekst
+    Givet en ny anonym session er oprettet
+    Når sessionmetadata persisteres
+    Så sessionen indeholder toilet-id
+    Og sessionen indeholder tidsstempel`,
+        },
+        {
+          id: "FR-03",
+          group: "FR",
+          area: "Adgang & session",
+          title: "Afslut session via exit-event",
+          requirement:
+            "Systemet skal afslutte session ved kortscan ud, timeout eller dørsensor.",
+          gherkin: `Egenskab: Afslutning af session
+  Scenarie-skabelon: Exit-event lukker aktiv session
+    Givet der findes en aktiv session
+    Når systemet modtager <exitHændelse>
+    Så sessionen afsluttes
+
+    Eksempler:
+      | exitHændelse |
+      | kortscan ud  |
+      | timeout      |
+      | dørsensor    |`,
+        },
+        {
+          id: "FR-10",
+          group: "FR",
+          area: "Snapshots",
+          title: "Tag før-snapshot",
+          requirement: "Systemet skal tage et før-snapshot ved session start.",
+          gherkin: `Egenskab: Snapshot ved start
+  Scenarie: Tag før-snapshot
+    Givet en session netop er startet
+    Når snapshot-service er klar
+    Så systemet tager før-snapshot`,
+        },
+        {
+          id: "FR-11",
+          group: "FR",
+          area: "Snapshots",
+          title: "Tag efter-snapshot",
+          requirement: "Systemet skal tage et efter-snapshot ved session slut.",
+          gherkin: `Egenskab: Snapshot ved slut
+  Scenarie: Tag efter-snapshot
+    Givet en aktiv session afsluttes
+    Når exit-event er bekræftet
+    Så systemet tager efter-snapshot`,
+        },
+        {
+          id: "FR-12",
+          group: "FR",
+          area: "Snapshots",
+          title: "Ingen direkte feed adgang",
+          requirement: "Snapshots må ikke kunne tilgås som direkte feed.",
+          gherkin: `Egenskab: Ingen live-overvågning
+  Scenarie: Bloker forsøg på direkte videostrøm
+    Givet snapshots eksisterer for et toilet
+    Når en klient anmoder om kontinuerligt kamera-feed
+    Så anmodningen afvises`,
+        },
+        {
+          id: "FR-20",
+          group: "FR",
+          area: "Vurdering",
+          title: "Beregn før/efter score",
+          requirement:
+            "Systemet skal beregne tilstandsscore før og efter besøg.",
+          gherkin: `Egenskab: Scoring af tilstand
+  Scenarie: Beregn score baseret på keypoints
+    Givet før- og eftersnapshot er tilgængelige
+    Når CV-pipeline udtrækker keypoints
+    Så systemet beregner førScore
+    Og systemet beregner efterScore`,
+        },
+        {
+          id: "FR-21",
+          group: "FR",
+          area: "Vurdering",
+          title: "Sammenlign med acceptable variationer",
+          requirement:
+            "Skraldespand ignoreres/normaliseres, WC-bræt accepteres i tre tilladte positioner, øvrige keypoints skal være samme eller bedre.",
+          gherkin: `Egenskab: Regler for acceptable variationer
+  Scenarie: Evaluer før/efter med undtagelser
+    Givet før- og efterscore er beregnet
+    Når regelmotor sammenligner keypoints
+    Så ændringer ved skraldespand ignoreres eller normaliseres
+    Og WC-bræt accepteres i tre tilladte positioner
+    Og øvrige keypoints skal være samme eller bedre`,
+        },
+        {
+          id: "FR-22",
+          group: "FR",
+          area: "Vurdering",
+          title: "Klassificer resultat",
+          requirement:
+            "Systemet skal klassificere resultatet som OK, let forværring, forværring eller ugyldigt.",
+          gherkin: `Egenskab: Klassifikation af resultat
+  Scenarie-skabelon: Klassificer baseret på ændring og sikkerhedsscore
+    Givet sammenligningen er udført
+    Når systemet evaluerer tærskel og sikkerhedsscore
+    Så resultat sættes til <status>
+
+    Eksempler:
+      | status         |
+      | OK             |
+      | let_forværring|
+      | forvaerring    |
+      | ugyldig        |`,
+        },
+        {
+          id: "FR-30",
+          group: "FR",
+          area: "Triggers",
+          title: "Opret rengøringstrigger",
+          requirement:
+            "Systemet skal oprette rengøringstrigger ved forværring.",
+          gherkin: `Egenskab: Trigger-oprettelse
+  Scenarie: Forværring opretter trigger
+    Givet et resultat er klassificeret som forværring
+    Når vurderingen gemmes
+    Så systemet opretter en rengøringstrigger`,
+        },
+        {
+          id: "FR-31",
+          group: "FR",
+          area: "Triggers",
+          title: "Trigger indeholder obligatoriske felter",
+          requirement:
+            "Trigger skal indeholde toilet-ID, alvorlighed, tidsstempel, metadata om ændringer og sikkerhedsscore.",
+          gherkin: `Egenskab: Triggerindhold
+  Scenarie: Gem komplet trigger-information
+    Givet en trigger er oprettet
+    Når triggerdata persisteres
+    Så trigger indeholder toilet-id
+    Og trigger indeholder alvorlighed
+    Og trigger indeholder tidsstempel
+    Og trigger indeholder ændringsmetadata
+    Og trigger indeholder sikkerhedsscore`,
+        },
+        {
+          id: "FR-40",
+          group: "FR",
+          area: "Dashboard",
+          title: "Push-opdatering i næsten realtid",
+          requirement: "Dashboard skal opdateres i næsten realtid via push.",
+          gherkin: `Egenskab: Realtidsopdatering af dashboard
+  Scenarie: Ændringer pushes til klienter
+    Givet aktuel tilstand eller triggers ændres
+    Når serverens push-hub udsender opdatering
+    Så tilsluttede dashboardklienter modtager opdateringen i næsten realtid`,
+        },
+        {
+          id: "FR-41",
+          group: "FR",
+          area: "Dashboard",
+          title: "Vis aktuel tilstand og aktive triggers",
+          requirement:
+            "Dashboard skal vise aktuel tilstand pr. toilet og aktive triggers.",
+          gherkin: `Egenskab: Realtidsoverblik pr. toilet
+  Scenarie: Åbn dashboardets forside
+    Givet en bruger har adgang til dashboard
+    Når forside-data indlæses
+    Så aktuel tilstand vises for hvert toilet
+    Og aktive triggers vises med prioritering`,
+        },
+        {
+          id: "FR-50",
+          group: "FR",
+          area: "Audit & logs",
+          title: "Log centrale events",
+          requirement:
+            "Systemet skal logge scan, snapshots, score, trigger og rengøringskvittering.",
+          gherkin: `Egenskab: Auditerbar eventlog
+  Scenarie: Persistér alle kritiske events
+    Givet systemkomponenter udsender events
+    Når et event modtages i modtagelseslaget
+    Så eventlog gemmer scan-event
+    Og eventlog gemmer snapshot-event
+    Og eventlog gemmer score-event
+    Og eventlog gemmer trigger-event
+    Og eventlog gemmer rengøringskvittering`,
+        },
+        {
+          id: "FR-51",
+          group: "FR",
+          area: "Audit & logs",
+          title: "Eksport af KPI-rapporter",
+          requirement:
+            "Systemet skal kunne eksportere KPI-data pr. uge og måned.",
+          gherkin: `Egenskab: Rapporteksport
+  Scenarie-skabelon: Eksportér rapportdata for periode
+    Givet KPI-data er aggregeret
+    Når en bruger anmoder om eksport for <periode>
+    Så systemet genererer en eksportfil med KPI-data
+
+    Eksempler:
+      | periode |
+      | uge     |
+      | måned   |`,
+        },
+        {
+          id: "NFR-01",
+          group: "NFR",
+          area: "Privacy",
+          title: "Ingen personidentifikation i serverdata",
+          requirement:
+            "Systemet skal implementere privacy-by-design uden personidentifikation.",
+          gherkin: `Egenskab: Privatliv som standard
+  Scenarie: Fjern personhenførbare data fra server-datapakke
+    Givet edge-enheden behandler snapshots
+    Når metadata sendes til server
+    Så datapakke indeholder ingen personidentificerende felter`,
+        },
+        {
+          id: "NFR-02",
+          group: "NFR",
+          area: "Edge-først",
+          title: "Kun metadata sendes",
+          requirement:
+            "Billeder behandles lokalt og kun metadata sendes videre.",
+          gherkin: `Egenskab: Lokal behandling på edge
+  Scenarie: Lokal billedbehandling
+    Givet rå billeder opfanges på edge
+    Når udtræk af nøglepunkter udføres
+    Så billedbehandling sker lokalt
+    Og kun metadata transmitteres til server`,
+        },
+        {
+          id: "NFR-03",
+          group: "NFR",
+          area: "Robusthed",
+          title: "Drift ved netværksudfald",
+          requirement:
+            "Systemet skal fortsætte drift ved udfald og buffer data lokalt.",
+          gherkin: `Egenskab: Offline robusthed
+  Scenarie: Netværket går ned under drift
+    Givet edge-enheden producerer events
+    Når netværksforbindelsen er utilgængelig
+    Så events placeres i lokal queue
+    Og events synkroniseres når forbindelsen returnerer`,
+        },
+        {
+          id: "NFR-04",
+          group: "NFR",
+          area: "Sikkerhed",
+          title: "Kryptering, hardening og adgangsstyring",
+          requirement:
+            "Systemet skal beskytte data i transit, hardene edge-enhed og styre dashboard-adgang.",
+          gherkin: `Egenskab: Sikkerhedsbaseline
+  Scenarie: Beskyt data og adgang
+    Givet data flyder mellem edge, API og dashboard
+    Når sikkerhedskrav håndhæves
+    Så trafik er krypteret i transit
+    Og edge-enheden er hardenet
+    Og dashboard kræver rollebaseret adgang`,
+        },
+        {
+          id: "NFR-05",
+          group: "NFR",
+          area: "Transparens",
+          title: "Tydelig skiltning",
+          requirement:
+            "Brugere skal informeres om snapshots, ikke direkte feed og ikke personfokus.",
+          gherkin: `Egenskab: Transparent kommunikation
+  Scenarie: Brugere møder systemet fysisk
+    Givet brugere ankommer til toiletområde
+    Når skiltning vises
+    Så skiltning forklarer snapshots frem for live-overvågning
+    Og skiltning forklarer fokus på tilstand frem for person`,
+        },
+        {
+          id: "NFR-06",
+          group: "NFR",
+          area: "Bias/fejl",
+          title: "Håndtering af usikker klassifikation",
+          requirement:
+            "Systemet skal håndtere occlusion og fejlklassifikation via sikkerhedsscore og fallback.",
+          gherkin: `Egenskab: Fejl- og usikkerhedshåndtering
+  Scenarie: Sikkerhedsscore er for lav
+    Givet klassifikationen har lav sikkerhedsscore
+    Når resultatet vurderes som usikkert
+    Så systemet markerer resultat som kræver_gennemgang
+    Og fallbackforløb aktiveres`,
+        },
+        {
+          id: "KPI-O1",
+          group: "KPI",
+          area: "Effekt",
+          title: "Klager pr. uge",
+          requirement:
+            "Systemet skal måle udviklingen i antal klager pr. uge (mål: ned).",
+          gherkin: `Egenskab: Effekt måling - klager
+  Scenarie: Ugentlig opgørelse af klager
+    Givet klagedata er tilgængelig for ugen
+    Når KPI-job køres
+    Så KPI-O1 beregnes og lagres
+    Og trendretning kan aflæses over tid`,
+        },
+        {
+          id: "KPI-O2",
+          group: "KPI",
+          area: "Effekt",
+          title: "Forværring-rate pr. 100 besøg",
+          requirement:
+            "Systemet skal måle forværring-rate pr. 100 besøg (mål: ned).",
+          gherkin: `Egenskab: Effekt måling - forværring-rate
+  Scenarie: Beregn rate pr. 100 besøg
+    Givet antal besøg og antal forværringer er kendt
+    Når KPI beregnes
+    Så KPI-O2 = (forværringer / besøg) * 100`,
+        },
+        {
+          id: "KPI-O3",
+          group: "KPI",
+          area: "Effekt",
+          title: "Responstid fra forværring til kvittering",
+          requirement:
+            "Systemet skal måle gennemsnitlig tid fra forværring til rengøringskvittering (mål: ned).",
+          gherkin: `Egenskab: Effekt måling - responstid
+  Scenarie: Beregn gennemsnitlig responstid
+    Givet trigger-oprettelser og kvitteringstidspunkter er logget
+    Når KPI-O3 beregnes
+    Så gennemsnitlig tid fra trigger til kvittering lagres`,
+        },
+        {
+          id: "KPI-O4",
+          group: "KPI",
+          area: "Effekt",
+          title: "Andel toiletter i OK-tilstand",
+          requirement:
+            "Systemet skal måle andel toiletter i OK aktuel tilstand i åbningstiden (mål: op).",
+          gherkin: `Egenskab: Effekt måling - OK andel
+  Scenarie: Beregn andel i OK-tilstand
+    Givet snapshots af aktuel tilstand over åbningstiden er tilgængelige
+    Når KPI-O4 aggregeres
+    Så andelen af toiletter i OK-tilstand beregnes og rapporteres`,
+        },
+        {
+          id: "KPI-P1",
+          group: "KPI",
+          area: "Drift",
+          title: "Triggers pr. dag og lokation",
+          requirement:
+            "Systemet skal måle antal triggers pr. dag og pr. lokation.",
+          gherkin: `Egenskab: Drift måling - trigger volumen
+  Scenarie: Opgør triggers pr. dag/lokation
+    Givet trigger-events er logget med lokation
+    Når daglig aggregering køres
+    Så KPI-P1 rapporterer triggerantal pr. lokation`,
+        },
+        {
+          id: "KPI-P2",
+          group: "KPI",
+          area: "Drift",
+          title: "False positive rate",
+          requirement: "Systemet skal måle andel falske alarmer.",
+          gherkin: `Egenskab: Drift måling - falske positiver
+  Scenarie: Beregn falsk alarm rate
+    Givet triggers kan markeres som falsk alarm
+    Når KPI-P2 beregnes
+    Så falsk alarm-rate rapporteres for valgt periode`,
+        },
+        {
+          id: "KPI-P3",
+          group: "KPI",
+          area: "Drift",
+          title: "Dækning af før/efter-snapshots",
+          requirement:
+            "Systemet skal måle andel sessions med både før- og eftersnapshot (mål: høj).",
+          gherkin: `Egenskab: Drift måling - dækning
+  Scenarie: Opgør sessionsdækning
+    Givet sessions er logget
+    Når KPI-P3 beregnes
+    Så andelen med både før- og efter-snapshot rapporteres`,
+        },
+        {
+          id: "KPI-P4",
+          group: "KPI",
+          area: "Drift",
+          title: "Oppetid pr. edge-enhed",
+          requirement: "Systemet skal måle oppetid pr. edge-enhed (mål: høj).",
+          gherkin: `Egenskab: Drift måling - edge stabilitet
+  Scenarie: Beregn uptime pr. edge-enhed
+    Givet heartbeat-data indsamles fra enheder
+    Når KPI-P4 beregnes
+    Så oppetidsprocent rapporteres pr. enhed`,
+        },
+        {
+          id: "KPI-A1",
+          group: "KPI",
+          area: "Adfærd",
+          title: "Recidiv-frekvens pr. toilet/tidsrum",
+          requirement:
+            "Systemet skal måle recidiv-frekvens pr. toilet og tidsrum uden personidentifikation.",
+          gherkin: `Egenskab: Adfærdsmåling - recidiv
+  Scenarie: Identificér problemtidspunkter anonymt
+    Givet anonymt aggregerede hændelser pr. toilet og tidsblok
+    Når KPI-A1 udregnes
+    Så recidiv-frekvens rapporteres uden persondata`,
+        },
+        {
+          id: "KPI-A2",
+          group: "KPI",
+          area: "Adfærd",
+          title: "Før/efter kampagne-effekt",
+          requirement:
+            "Systemet skal måle forværring-rate før og efter nudging-kampagner.",
+          gherkin: `Egenskab: Adfærdsmåling - kampagneeffekt
+  Scenarie: Sammenlign før- og efterperiode
+    Givet kampagneperioder er markeret i datasættet
+    Når KPI-A2 beregnes
+    Så forværring-rate før mod efter sammenlignes`,
+        },
+        {
+          id: "KPI-A3",
+          group: "KPI",
+          area: "Adfærd",
+          title: "Rate pr. hold/område (etisk betinget)",
+          requirement:
+            "Systemet kan måle forværring-rate pr. hold/område, kun hvis anonymt aggregérbart og etisk godkendt.",
+          gherkin: `Egenskab: Adfærdsmåling - segmenteret analyse
+  Scenarie: Beregn segmenteret rate under etiske rammer
+    Givet anonym aggregering er mulig for hold eller område
+    Og etisk godkendelse foreligger
+    Når KPI-A3 beregnes
+    Så forværring-rate pr. segment rapporteres`,
+        },
+      ];
+
+      const requirementsEl = document.getElementById("requirements");
+      const noResultsEl = document.getElementById("noResults");
+      const searchInput = document.getElementById("searchInput");
+      const resultCountEl = document.getElementById("resultCount");
+      const reqCountBadgeEl = document.getElementById("reqCountBadge");
+      const completionOverallEl = document.getElementById("completionOverall");
+      const completionProgressBarEl = document.getElementById(
+        "completionProgressBar",
+      );
+      const completionFREl = document.getElementById("completionFR");
+      const completionNFREl = document.getElementById("completionNFR");
+      const completionKPIEl = document.getElementById("completionKPI");
+      const filterButtons = Array.from(
+        document.querySelectorAll(".filter-btn"),
+      );
+      const completionStorageKey = "wctv_krav_completion_v1";
+      const validRequirementIds = new Set(requirements.map((item) => item.id));
+      const completedRequirementIds = loadCompletedRequirementIds();
+      const bddViewState = new Map();
+
+      let activeFilter = "ALL";
+
+      function escapeHtml(text) {
+        return text
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
+      function toFormalBddText(gherkinText) {
+        const lines = gherkinText.split(/\r?\n/);
+        return lines
+          .map((line) => {
+            const trimmed = line.trim();
+            const indent = line.match(/^\s*/)[0];
+            if (trimmed.startsWith("Egenskab:")) {
+              const rest = trimmed.slice("Egenskab:".length).trim();
+              return `${indent}Forretningsregel: ${rest}`;
+            }
+            if (trimmed.startsWith("Scenarie-skabelon:")) {
+              const rest = trimmed.slice("Scenarie-skabelon:".length).trim();
+              return `${indent}Datadrevet scenarie: ${rest}`;
+            }
+            if (trimmed.startsWith("Scenarie:")) {
+              const rest = trimmed.slice("Scenarie:".length).trim();
+              return `${indent}Scenarie: ${rest}`;
+            }
+            if (trimmed.startsWith("Givet ")) {
+              const rest = trimmed.slice("Givet ".length).trim();
+              return `${indent}Forudsætning: ${rest}`;
+            }
+            if (trimmed.startsWith("Når ")) {
+              const rest = trimmed.slice("Når ".length).trim();
+              return `${indent}Handling: ${rest}`;
+            }
+            if (trimmed.startsWith("Så ")) {
+              const rest = trimmed.slice("Så ".length).trim();
+              return `${indent}Forventet resultat: ${rest}`;
+            }
+            if (trimmed.startsWith("Og ")) {
+              const rest = trimmed.slice("Og ".length).trim();
+              return `${indent}Supplerende krav: ${rest}`;
+            }
+            if (trimmed.startsWith("Eksempler:")) {
+              return `${indent}Datavarianter:`;
+            }
+            return line;
+          })
+          .join("\n");
+      }
+
+      function loadCompletedRequirementIds() {
+        try {
+          const rawData = localStorage.getItem(completionStorageKey);
+          if (!rawData) {
+            return new Set();
+          }
+          const parsed = JSON.parse(rawData);
+          if (!Array.isArray(parsed)) {
+            return new Set();
+          }
+          return new Set(parsed.filter((id) => validRequirementIds.has(id)));
+        } catch {
+          return new Set();
+        }
+      }
+
+      function persistCompletedRequirementIds() {
+        try {
+          localStorage.setItem(
+            completionStorageKey,
+            JSON.stringify(Array.from(completedRequirementIds)),
+          );
+        } catch {}
+      }
+
+      function getCompletionStats() {
+        const total = requirements.length;
+        const completed = requirements.reduce((count, item) => {
+          return count + (completedRequirementIds.has(item.id) ? 1 : 0);
+        }, 0);
+        const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+        const groups = ["FR", "NFR", "KPI"].reduce((result, group) => {
+          const groupItems = requirements.filter(
+            (item) => item.group === group,
+          );
+          const groupCompleted = groupItems.reduce((count, item) => {
+            return count + (completedRequirementIds.has(item.id) ? 1 : 0);
+          }, 0);
+          result[group] = {
+            completed: groupCompleted,
+            total: groupItems.length,
+          };
+          return result;
+        }, {});
+        return {
+          total,
+          completed,
+          percent,
+          groups,
+        };
+      }
+
+      function updateCompletionReport() {
+        const stats = getCompletionStats();
+        completionOverallEl.textContent = `${stats.completed}/${stats.total} (${stats.percent}%)`;
+        completionProgressBarEl.style.width = `${stats.percent}%`;
+        completionFREl.textContent = `FR: ${stats.groups.FR.completed}/${stats.groups.FR.total}`;
+        completionNFREl.textContent = `NFR: ${stats.groups.NFR.completed}/${stats.groups.NFR.total}`;
+        completionKPIEl.textContent = `KPI: ${stats.groups.KPI.completed}/${stats.groups.KPI.total}`;
+        reqCountBadgeEl.textContent = `${stats.total} krav`;
+      }
+
+      function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        const filtered = requirements.filter((item) => {
+          const matchesGroup =
+            activeFilter === "ALL" || item.group === activeFilter;
+          const haystack =
+            `${item.id} ${item.group} ${item.area} ${item.title} ${item.requirement} ${item.gherkin}`.toLowerCase();
+          const matchesQuery = query.length === 0 || haystack.includes(query);
+          return matchesGroup && matchesQuery;
+        });
+
+        renderRequirements(filtered);
+        resultCountEl.textContent = `${filtered.length} resultater`;
+        noResultsEl.hidden = filtered.length !== 0;
+        updateCompletionReport();
+      }
+
+      function renderRequirements(items) {
+        if (items.length === 0) {
+          requirementsEl.innerHTML = "";
+          return;
+        }
+
+        requirementsEl.innerHTML = items
+          .map((item) => {
+            const isCompleted = completedRequirementIds.has(item.id);
+            const selectedView = bddViewState.get(item.id) || "gherkin";
+            const formalBddText = toFormalBddText(item.gherkin);
+            return `
+              <details class="req${isCompleted ? " done" : ""}" data-id="${item.id}">
+                <summary class="req-summary">
+                  <div class="req-head">
+                    <span class="req-id">${item.id}</span>
+                    <span class="req-title">${item.title}</span>
+                    <span class="req-type">${item.group}</span>
+                    <label class="complete-control" title="Marker krav som gennemført">
+                      <input
+                        type="checkbox"
+                        class="req-complete"
+                        data-id="${item.id}"
+                        aria-label="Marker ${item.id} som gennemført"
+                        ${isCompleted ? "checked" : ""}
+                      />
+                      <span>Gennemført</span>
+                    </label>
+                  </div>
+                </summary>
+                <div class="req-body">
+                  <p class="req-text"><strong>Område:</strong> ${item.area}</p>
+                  <p class="req-text"><strong>Krav:</strong> ${item.requirement}</p>
+                  <div class="view-toggle" role="group" aria-label="Visning af krav ${item.id}">
+                    <button
+                      type="button"
+                      class="view-btn${selectedView === "gherkin" ? " active" : ""}"
+                      data-id="${item.id}"
+                      data-view="gherkin"
+                    >
+                      Gherkin
+                    </button>
+                    <button
+                      type="button"
+                      class="view-btn${selectedView === "formal" ? " active" : ""}"
+                      data-id="${item.id}"
+                      data-view="formal"
+                    >
+                      Formelt BDD
+                    </button>
+                  </div>
+                  <pre class="gherkin gherkin-view"${selectedView === "gherkin" ? "" : " hidden"}>${escapeHtml(item.gherkin)}</pre>
+                  <pre class="gherkin formal-view"${selectedView === "formal" ? "" : " hidden"}>${escapeHtml(formalBddText)}</pre>
+                </div>
+              </details>
+            `;
+          })
+          .join("");
+
+        const detailsNodes = Array.from(
+          requirementsEl.querySelectorAll("details.req"),
+        );
+        detailsNodes.forEach((node) => {
+          node.addEventListener("toggle", () => {
+            if (!node.open) {
+              return;
+            }
+            detailsNodes.forEach((other) => {
+              if (other !== node) {
+                other.open = false;
+              }
+            });
+          });
+        });
+
+        const completionControls = Array.from(
+          requirementsEl.querySelectorAll(".complete-control"),
+        );
+        completionControls.forEach((control) => {
+          control.addEventListener("click", (event) => {
+            event.stopPropagation();
+          });
+          control.addEventListener("keydown", (event) => {
+            event.stopPropagation();
+          });
+        });
+
+        const completionCheckboxes = Array.from(
+          requirementsEl.querySelectorAll(".req-complete"),
+        );
+        completionCheckboxes.forEach((checkbox) => {
+          checkbox.addEventListener("click", (event) => {
+            event.stopPropagation();
+          });
+          checkbox.addEventListener("change", (event) => {
+            const checkboxEl = event.target;
+            const requirementId = checkboxEl.dataset.id;
+            if (!requirementId) {
+              return;
+            }
+            if (checkboxEl.checked) {
+              completedRequirementIds.add(requirementId);
+            } else {
+              completedRequirementIds.delete(requirementId);
+            }
+            persistCompletedRequirementIds();
+            const requirementNode = checkboxEl.closest("details.req");
+            if (requirementNode) {
+              requirementNode.classList.toggle("done", checkboxEl.checked);
+            }
+            updateCompletionReport();
+          });
+        });
+
+        const viewToggleButtons = Array.from(
+          requirementsEl.querySelectorAll(".view-btn"),
+        );
+        viewToggleButtons.forEach((button) => {
+          button.addEventListener("click", (event) => {
+            event.stopPropagation();
+            const buttonEl = event.currentTarget;
+            const requirementId = buttonEl.dataset.id;
+            const selectedView = buttonEl.dataset.view;
+            if (!requirementId || !selectedView) {
+              return;
+            }
+            bddViewState.set(requirementId, selectedView);
+
+            const body = buttonEl.closest(".req-body");
+            if (!body) {
+              return;
+            }
+            const buttonsInBody = Array.from(
+              body.querySelectorAll(".view-btn"),
+            );
+            buttonsInBody.forEach((btn) => {
+              btn.classList.toggle("active", btn === buttonEl);
+            });
+            const gherkinView = body.querySelector(".gherkin-view");
+            const formalView = body.querySelector(".formal-view");
+            if (gherkinView) {
+              gherkinView.hidden = selectedView !== "gherkin";
+            }
+            if (formalView) {
+              formalView.hidden = selectedView !== "formal";
+            }
+          });
+        });
+      }
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          activeFilter = button.dataset.filter;
+          filterButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+          applyFilters();
+        });
+      });
+
+      searchInput.addEventListener("input", applyFilters);
+      applyFilters();
+    </script>
+  
+
+</body></html>

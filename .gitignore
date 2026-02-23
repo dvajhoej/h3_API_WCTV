@@ -1,0 +1,113 @@
+# ========================================
+# OS / General
+# ========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+*.stackdump
+
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
+*.old
+*.orig
+*.swp
+*.swo
+*.swn
+*.pid
+*.seed
+*.pid.lock
+
+*.db*
+
+# ========================================
+# IDEs / Editors
+# ========================================
+.claude/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+*.jfm
+*.ide
+
+.vscode/
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+
+.idea/
+*.sln.iml
+*.DotSettings.user
+
+# ========================================
+# .NET / Visual Studio
+# ========================================
+[Bb]in/
+[Oo]bj/
+[Aa]rtifacts/
+TestResults/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+*.nuget.props
+*.nuget.targets
+packages/
+*.cachefile
+*.sln.cache
+
+# User-specific files
+*.rsuser
+*.sln.ide
+*.vspscc
+*.vssscc
+*.psess
+*.vsp
+*.vspx
+*.md
+
+# ========================================
+# Node / React
+# ========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.npm/
+.pnpm-store/
+.pnp.*
+
+dist/
+build/
+coverage/
+.cache/
+.parcel-cache/
+.vite/
+.turbo/
+.next/
+out/
+storybook-static/
+cypress/videos/
+cypress/screenshots/
+
+*.tsbuildinfo
+.eslintcache
+
+# Env files (keep examples/samples)
+.env
+.env.*
+!.env.example
+!.env.sample
