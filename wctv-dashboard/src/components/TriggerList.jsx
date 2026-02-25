@@ -1,4 +1,5 @@
 import React from 'react'
+import { CollapsibleSection } from './CollapsibleSection'
 
 const SEVERITY = {
   let:        { label: 'Lidt snavset',  color: 'var(--orange)', bg: 'var(--orange-bg)', border: 'rgba(245,158,11,0.35)'  },
@@ -31,20 +32,18 @@ function ConfBar({ value }) {
 
 export function TriggerList({ triggers, onAcknowledge, onComplete, onFalsePositive }) {
   return (
-    <section style={{ marginBottom: 40 }}>
-      <div className="section-heading">
-        <h2>Rengøringsopgaver</h2>
-        <div className="section-line" />
-        {triggers.length > 0 && (
-          <div
-            className="section-badge"
-            style={{ color: 'var(--red)', borderColor: 'rgba(239,68,68,0.3)' }}
-          >
-            {triggers.length} afventer
-          </div>
-        )}
-      </div>
-
+    <CollapsibleSection
+      title="Rengøringsopgaver"
+      style={{ marginBottom: 40 }}
+      badge={triggers.length > 0 ? (
+        <div
+          className="section-badge"
+          style={{ color: 'var(--red)', borderColor: 'rgba(239,68,68,0.3)' }}
+        >
+          {triggers.length} afventer
+        </div>
+      ) : null}
+    >
       {triggers.length === 0 ? (
         <div className="empty-state">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -122,6 +121,6 @@ export function TriggerList({ triggers, onAcknowledge, onComplete, onFalsePositi
           })}
         </div>
       )}
-    </section>
+    </CollapsibleSection>
   )
 }

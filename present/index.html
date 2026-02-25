@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCTV — Startside</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Landing-page only overrides */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
+    }
+
+    .landing-hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .landing-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      background: var(--surf-1);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      margin-bottom: 1.4rem;
+    }
+
+    .landing-hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--text-1);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
+    .landing-tagline {
+      font-size: 1.1rem;
+      color: var(--text-2);
+      margin-bottom: 0.4rem;
+    }
+
+    .landing-sub {
+      font-size: 0.82rem;
+      color: var(--text-4);
+    }
+
+    /* Section wrapper for card groups */
+    .landing-section {
+      width: 100%;
+      max-width: 960px;
+      margin-bottom: 2rem;
+    }
+
+    .landing-section-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-4);
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+
+    .landing-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 860px) {
+      .landing-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .landing-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Override card-link for landing to stack vertically */
+    .landing-grid a.card-link {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .landing-grid .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .landing-grid .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-1);
+      margin-bottom: 0.3rem;
+    }
+
+    .landing-grid .card-desc {
+      font-size: 0.78rem;
+      color: var(--text-3);
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      font-size: 0.72rem;
+      color: var(--text-4);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="landing-hero">
+    <div class="landing-logo">
+      <svg width="36" height="36" viewBox="0 0 32 32" fill="none">
+        <rect x="2" y="8" width="28" height="18" rx="3" stroke="#3b82f6" stroke-width="1.8"/>
+        <circle cx="16" cy="17" r="5" stroke="#60a5fa" stroke-width="1.8"/>
+        <circle cx="16" cy="17" r="2" fill="#3b82f6"/>
+        <rect x="12" y="4" width="8" height="5" rx="1.5" stroke="#475569" stroke-width="1.5"/>
+        <circle cx="25" cy="12" r="1.5" fill="#22c55e"/>
+      </svg>
+    </div>
+    <h1>WCTV</h1>
+    <p class="landing-tagline">Smartere rengøring. Renere toiletter.</p>
+    <p class="landing-sub">Et projekt fra Techcollege &middot; H3 API &middot; 2026</p>
+  </div>
+
+  <main>
+
+    <section class="landing-section">
+      <div class="landing-section-label">Læs om projektet</div>
+      <div class="landing-grid">
+
+        <a class="card-link" href="overblik.html">
+          <div class="card-icon">📋</div>
+          <div class="card-title">Om projektet</div>
+          <div class="card-desc">Hvad er WCTV, hvem er det til, og hvad løser det?</div>
+        </a>
+
+        <a class="card-link" href="arkitektur.html">
+          <div class="card-icon">🏗️</div>
+          <div class="card-title">Systemets opbygning</div>
+          <div class="card-desc">Hvordan er systemet sat sammen, og hvad sker hvornår?</div>
+        </a>
+
+        <a class="card-link" href="krav.html">
+          <div class="card-icon">✅</div>
+          <div class="card-title">Krav og resultater</div>
+          <div class="card-desc">Hvilke krav skulle vi opfylde, og hvad har vi nået?</div>
+        </a>
+
+        <a class="card-link" href="demo.html">
+          <div class="card-icon">🚀</div>
+          <div class="card-title">Demo-guide</div>
+          <div class="card-desc">Trin-for-trin guide til at starte og vise systemet frem.</div>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="landing-section">
+      <div class="landing-section-label">Visuelle diagrammer</div>
+      <div class="landing-grid">
+
+        <a class="card-link" href="FLOWCHART.html">
+          <div class="card-icon">🔄</div>
+          <div class="card-title">Besøgsforløb</div>
+          <div class="card-desc">Se hvad der sker fra kortscanning til rengøring er færdig.</div>
+        </a>
+
+        <a class="card-link" href="DB_RELATIONER.html">
+          <div class="card-icon">🗄️</div>
+          <div class="card-title">Databasestruktur</div>
+          <div class="card-desc">Overblik over hvad systemet gemmer, og hvordan det hænger sammen.</div>
+        </a>
+
+        <a class="card-link" href="DATAFLOW_DB.html">
+          <div class="card-icon">➡️</div>
+          <div class="card-title">Dataflow</div>
+          <div class="card-desc">Hvad gemmer systemet hvornår — og hvem henter det igen?</div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>WCTV &middot; Techcollege &middot; H3 API &middot; 2026</footer>
+
+</body>
+</html>

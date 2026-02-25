@@ -33,7 +33,7 @@ public class DataMotorService : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            int delayMs = _rng.Next(8000, 18001);
+            int delayMs = _rng.Next(25000, 45001);
             await Task.Delay(delayMs, stoppingToken);
 
             try
@@ -163,38 +163,51 @@ public class DataMotorService : BackgroundService
         // Create trigger if needed
         if (outcome.TriggerSeverity != null)
         {
-            var trigger = new CleaningTrigger
-            {
-                ToiletId = toilet.Id,
-                SessionId = session.Id,
-                Severity = outcome.TriggerSeverity,
-                Status = "active",
-                Confidence = outcome.Confidence,
-                ChangeMetadata = JsonSerializer.Serialize(new { delta = outcome.Delta, result = outcome.Result }),
-                CreatedAt = DateTime.UtcNow
-            };
-            db.CleaningTriggers.Add(trigger);
-            await db.SaveChangesAsync(ct);
+            var hasOpenTrigger = await db.CleaningTriggers.AnyAsync(
+                t => t.ToiletId == toilet.Id && (t.Status == "active" || t.Status == "acknowledged"),
+                ct);
 
-            await _hub.Clients.All.SendAsync("ReceiveTriggerCreated", new
+            if (hasOpenTrigger)
             {
-                trigger = new
+                _logger.LogInformation(
+                    "Motor: Open trigger already exists for Toilet {ToiletId} - skipping new trigger",
+                    toilet.Id);
+            }
+            else
+            {
+                var trigger = new CleaningTrigger
                 {
-                    id = trigger.Id,
-                    toiletId = trigger.ToiletId,
-                    toiletName = toilet.Name,
-                    severity = trigger.Severity,
-                    status = trigger.Status,
-                    confidence = trigger.Confidence,
-                    createdAt = trigger.CreatedAt
-                }
-            }, ct);
+                    ToiletId = toilet.Id,
+                    SessionId = session.Id,
+                    Severity = outcome.TriggerSeverity,
+                    Status = "active",
+                    Confidence = outcome.Confidence,
+                    ChangeMetadata = JsonSerializer.Serialize(new { delta = outcome.Delta, result = outcome.Result }),
+                    CreatedAt = DateTime.UtcNow
+                };
+                db.CleaningTriggers.Add(trigger);
+                await db.SaveChangesAsync(ct);
 
-            _logger.LogInformation("Motor: Trigger created for Toilet {ToiletId}, severity={Severity}",
-                toilet.Id, trigger.Severity);
+                await _hub.Clients.All.SendAsync("ReceiveTriggerCreated", new
+                {
+                    trigger = new
+                    {
+                        id = trigger.Id,
+                        toiletId = trigger.ToiletId,
+                        toiletName = toilet.Name,
+                        severity = trigger.Severity,
+                        status = trigger.Status,
+                        confidence = trigger.Confidence,
+                        createdAt = trigger.CreatedAt
+                    }
+                }, ct);
 
-            // Schedule simulated cleaning team response (fire-and-forget)
-            _ = ScheduleCleaningResponseAsync(trigger.Id, toilet.Id, ct);
+                _logger.LogInformation("Motor: Trigger created for Toilet {ToiletId}, severity={Severity}",
+                    toilet.Id, trigger.Severity);
+
+                // Schedule simulated cleaning team response (fire-and-forget)
+                _ = ScheduleCleaningResponseAsync(trigger.Id, toilet.Id, ct);
+            }
         }
 
         // EventLog

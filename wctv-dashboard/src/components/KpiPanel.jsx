@@ -1,4 +1,5 @@
 import React from 'react'
+import { CollapsibleSection } from './CollapsibleSection'
 
 const KPI_CONFIG = {
   deteriorationRate: {
@@ -75,11 +76,7 @@ export function KpiPanel({ kpi }) {
   ]
 
   return (
-    <section style={{ marginBottom: 40 }}>
-      <div className="section-heading">
-        <h2>Ugeoversigt</h2>
-        <div className="section-line" />
-      </div>
+    <CollapsibleSection title="Ugeoversigt" style={{ marginBottom: 40 }}>
       <div className="kpi-grid">
         {entries.map(([key, val]) => {
           const cfg = KPI_CONFIG[key]
@@ -102,6 +99,6 @@ export function KpiPanel({ kpi }) {
           )
         })}
       </div>
-    </section>
+    </CollapsibleSection>
   )
 }

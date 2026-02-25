@@ -1,4 +1,5 @@
 import React from 'react'
+import { CollapsibleSection } from './CollapsibleSection'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, ReferenceLine,
@@ -50,12 +51,7 @@ export function DailyConditionGraph({ data }) {
   const color = scoreColor(avg)
 
   return (
-    <section style={{ marginBottom: 40 }}>
-      <div className="section-heading">
-        <h2>Tilstand i dag</h2>
-        <div className="section-line" />
-      </div>
-
+    <CollapsibleSection title="Tilstand i dag" style={{ marginBottom: 40 }}>
       <div style={{
         background: 'var(--surf-1)',
         border: '1px solid var(--border)',
@@ -130,6 +126,6 @@ export function DailyConditionGraph({ data }) {
           </ResponsiveContainer>
         )}
       </div>
-    </section>
+    </CollapsibleSection>
   )
 }

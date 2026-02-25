@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCTV — Om projektet</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="topnav">
+    <a href="index.html" class="nav-home">
+      <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+        <rect x="2" y="8" width="28" height="18" rx="3" stroke="#3b82f6" stroke-width="1.8"/>
+        <circle cx="16" cy="17" r="5" stroke="#60a5fa" stroke-width="1.8"/>
+        <circle cx="16" cy="17" r="2" fill="#3b82f6"/>
+        <rect x="12" y="4" width="8" height="5" rx="1.5" stroke="#475569" stroke-width="1.5"/>
+        <circle cx="25" cy="12" r="1.5" fill="#22c55e"/>
+      </svg>
+      WCTV
+    </a>
+    <a href="overblik.html" class="active">Om projektet</a>
+    <a href="arkitektur.html">Systemet</a>
+    <a href="FLOWCHART.html">Besøgsforløb</a>
+    <a href="DB_RELATIONER.html">Database</a>
+    <a href="DATAFLOW_DB.html">Dataflow</a>
+    <a href="krav.html">Krav</a>
+    <a href="demo.html">Demo</a>
+  </nav>
+
+  <div class="page">
+
+    <!-- ── Hero ── -->
+    <div class="hero">
+      <span class="hero-tag">Om projektet</span>
+      <h1>Hvad er WCTV?</h1>
+      <p>Et system der automatisk opdager, hvornår et toilet trænger til rengøring — uden at overvåge nogen.</p>
+    </div>
+
+    <!-- ── Problemet vi løste ── -->
+    <section class="section">
+      <div class="section-title">Problemet vi løste</div>
+      <div class="card-grid">
+
+        <div class="card">
+          <div class="card-icon">⏱️</div>
+          <div class="card-title">Spildte ressourcer</div>
+          <div class="card-desc">Rengøring sker efter fast tidsplan, selvom toiletterne er rene. Det er ineffektivt og koster unødvendige timer.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔍</div>
+          <div class="card-title">For lange ventetider</div>
+          <div class="card-desc">Snavsede toiletter opdages for sent, fordi ingen tjekker løbende. Brugerne oplever det, men ingen handler.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">📉</div>
+          <div class="card-title">Ingen data</div>
+          <div class="card-desc">Ingen ved, hvilke toiletter der er mest problemfyldte. Beslutninger tages på mavefornemmelse frem for fakta.</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Vores løsning ── -->
+    <section class="section">
+      <div class="section-title">Vores løsning</div>
+
+      <div class="info-box blue mt-2">
+        Systemet registrerer et anonymt besøg, når nogen scanner sit adgangskort. Når besøget er slut, sammenligner et kamera "før"- og "efter"-billeder. Hvis toilettet er blevet mere snavset, sender systemet automatisk en rengøringsopgave til rengøringsteamet.
+      </div>
+
+      <div class="step-list mt-3">
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Anonymt</div>
+            <div class="step-desc">Ingen person registreres. Kun kortet scannes, og ID'et gemmes krypteret. Det er aldrig muligt at spore, hvem der har brugt toilettet.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Automatisk</div>
+            <div class="step-desc">Ingen manuel kontrol. Systemet vurderer selv, om der er brug for rengøring, og sender opgaven direkte til rengøringsteamet.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Realtid</div>
+            <div class="step-desc">Rengøringsteamet ser nye opgaver med det samme på deres skærm — ingen forsinkelse, ingen manuel opdatering.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Hvem bruger systemet ── -->
+    <section class="section">
+      <div class="section-title">Hvem bruger systemet?</div>
+      <div class="role-grid">
+
+        <div class="role-card">
+          <div class="role-icon">👤</div>
+          <div class="role-name">Studerende</div>
+          <div class="role-label">Scanner adgangskortet</div>
+          <div class="role-desc">Bruger toilettet som normalt. Kortet starter en anonym registrering — den studerende mærker ingenting.</div>
+        </div>
+
+        <div class="role-card">
+          <div class="role-icon">🧹</div>
+          <div class="role-name">Rengøringspersonale</div>
+          <div class="role-label">Modtager opgaver</div>
+          <div class="role-desc">Ser en prioriteret liste over toiletter, der skal rengøres, og kvitterer når de er færdige.</div>
+        </div>
+
+        <div class="role-card">
+          <div class="role-icon">🖥️</div>
+          <div class="role-name">Ejendomsservice</div>
+          <div class="role-label">Overvåger i realtid</div>
+          <div class="role-desc">Følger toiletstanden live på dashboardet og kan se, hvor der er hotspots eller gentagne problemer.</div>
+        </div>
+
+        <div class="role-card">
+          <div class="role-icon">📊</div>
+          <div class="role-name">Skoleledelsen</div>
+          <div class="role-label">Læser rapporter</div>
+          <div class="role-desc">Får ugentlige nøgletal om rengøringsbehov, responstid og besøgsantal — uden teknisk indsigt krævet.</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Hvad har vi bygget ── -->
+    <section class="section">
+      <div class="section-title">Hvad har vi bygget?</div>
+      <div class="two-col">
+
+        <div class="card">
+          <div class="card-title" style="color: var(--green); margin-bottom: 0.8rem;">Fuldt implementeret</div>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.55rem;">
+            <li style="display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.83rem; color: var(--text-2);">
+              <span style="color: var(--green); flex-shrink: 0;">✓</span>
+              Et live-dashboard der opdaterer sig automatisk
+            </li>
+            <li style="display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.83rem; color: var(--text-2);">
+              <span style="color: var(--green); flex-shrink: 0;">✓</span>
+              En opgaveliste til rengøringsteamet med handlingsknapper
+            </li>
+            <li style="display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.83rem; color: var(--text-2);">
+              <span style="color: var(--green); flex-shrink: 0;">✓</span>
+              Ugentlige nøgletal og en daglig konditionsgraf
+            </li>
+            <li style="display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.83rem; color: var(--text-2);">
+              <span style="color: var(--green); flex-shrink: 0;">✓</span>
+              En database der gemmer alle besøg og opgaver
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title" style="color: var(--orange); margin-bottom: 0.8rem;">Simuleret (ingen hardware til rådighed)</div>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.55rem;">
+            <li style="display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.83rem; color: var(--text-2);">
+              <span style="color: var(--orange); flex-shrink: 0;">~</span>
+              Adgangskortscanning (RFID/NFC kortlæser)
+            </li>
+            <li style="display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.83rem; color: var(--text-2);">
+              <span style="color: var(--orange); flex-shrink: 0;">~</span>
+              Kamera og automatisk billedvurdering
+            </li>
+            <li style="display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.83rem; color: var(--text-2);">
+              <span style="color: var(--orange); flex-shrink: 0;">~</span>
+              Dørsensor
+            </li>
+          </ul>
+          <div class="info-box orange mt-2">
+            Alle disse dele er erstattet af en automatisk testmotor, der simulerer rigtige besøg hvert 25–45 sekund.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Teknologierne vi brugte ── -->
+    <section class="section">
+      <div class="section-title">Teknologierne vi brugte</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Hvad</th>
+              <th>Teknologi</th>
+              <th>Hvad bruges det til</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Visningsapp (dashboard)</td>
+              <td><code>React + Vite</code></td>
+              <td>Den skærm rengøringsteamet og ejendomsservice ser</td>
+            </tr>
+            <tr>
+              <td>Systemets hjerne (backend)</td>
+              <td><code>ASP.NET Core (.NET 10)</code></td>
+              <td>Modtager data, beregner resultater, gemmer i database</td>
+            </tr>
+            <tr>
+              <td>Databasen</td>
+              <td><code>SQLite</code></td>
+              <td>Gemmer alle besøg, opgaver og resultater lokalt</td>
+            </tr>
+            <tr>
+              <td>Live-opdateringer</td>
+              <td><code>SignalR</code></td>
+              <td>Dashboardet opdaterer sig selv uden at siden genindlæses</td>
+            </tr>
+            <tr>
+              <td>Grafer</td>
+              <td><code>Recharts</code></td>
+              <td>Den daglige konditionsgraf i dashboardet</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>

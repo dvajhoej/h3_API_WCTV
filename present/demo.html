@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCTV — Demo-guide</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-home">
+    <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+      <rect x="2" y="8" width="28" height="18" rx="3" stroke="#3b82f6" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="5" stroke="#60a5fa" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="2" fill="#3b82f6"/>
+      <rect x="12" y="4" width="8" height="5" rx="1.5" stroke="#475569" stroke-width="1.5"/>
+      <circle cx="25" cy="12" r="1.5" fill="#22c55e"/>
+    </svg>
+    WCTV
+  </a>
+  <a href="overblik.html">Om projektet</a>
+  <a href="arkitektur.html">Systemet</a>
+  <a href="FLOWCHART.html">Besøgsforløb</a>
+  <a href="DB_RELATIONER.html">Database</a>
+  <a href="DATAFLOW_DB.html">Dataflow</a>
+  <a href="krav.html">Krav</a>
+  <a href="demo.html" class="active">Demo</a>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <span class="hero-tag">Demo-guide</span>
+    <h1>Sådan demonstrerer du systemet</h1>
+    <p>Start systemet, åbn dashboardet og vis de vigtigste funktioner — ca. 10 minutter i alt.</p>
+  </div>
+
+  <!-- ── Forudsætninger ── -->
+  <div class="section">
+    <div class="section-title">Det skal være installeret på computeren</div>
+    <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:1.8rem;margin-bottom:0.4rem;">⚙️</div>
+        <div class="card-title">.NET SDK 10</div>
+        <div class="card-desc">Kører systemets hjerne (backend)</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:1.8rem;margin-bottom:0.4rem;">🟩</div>
+        <div class="card-title">Node.js 18+</div>
+        <div class="card-desc">Kører dashboardet (visningsapp)</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:1.8rem;margin-bottom:0.4rem;">💾</div>
+        <div class="card-title">Intet databasesetup</div>
+        <div class="card-desc">Databasen oprettes automatisk ved første opstart</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Start systemet ── -->
+  <div class="section">
+    <div class="section-title">Trin 1 — Start systemet</div>
+    <div class="info-box green" style="margin-bottom:1rem;">
+      <strong>Den hurtige måde (Windows):</strong> Dobbeltklik på <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">start.bat</code> i projektmappen. Det starter både backend og dashboard i hvert sit vindue.
+    </div>
+    <div class="two-col">
+      <div>
+        <p style="font-size:0.8rem;color:var(--text-4);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.06em;">Alternativt — Terminal 1 (backend)</p>
+        <div class="code-block">
+<span class="comment"># Naviger til backend-mappen</span>
+<span class="cmd">cd WCTV.Api</span>
+<span class="cmd">dotnet run</span></div>
+      </div>
+      <div>
+        <p style="font-size:0.8rem;color:var(--text-4);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.06em;">Alternativt — Terminal 2 (dashboard)</p>
+        <div class="code-block">
+<span class="comment"># Naviger til dashboard-mappen</span>
+<span class="cmd">cd wctv-dashboard</span>
+<span class="comment"># Kun første gang:</span>
+<span class="cmd">npm install</span>
+<span class="cmd">npm run dev</span></div>
+      </div>
+    </div>
+    <div class="info-box blue mt-2">
+      <strong>Åbn derefter i browseren:</strong><br>
+      Dashboard: <code style="background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:3px;">http://localhost:5173</code> &nbsp;·&nbsp;
+      API-dokumentation: <code style="background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:3px;">http://localhost:5000/swagger</code>
+    </div>
+  </div>
+
+  <!-- ── Demo-flow ── -->
+  <div class="section">
+    <div class="section-title">Trin 2 — Gennemgang af systemet (ca. 10 min)</div>
+    <div class="step-list">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Præsenter dashboardet <span style="color:var(--text-4);font-weight:400;font-size:0.8rem;">— 1 min</span></div>
+          <div class="step-desc">Åbn <code style="background:var(--surf-2);padding:1px 5px;border-radius:3px;font-size:0.78em;">http://localhost:5173</code> og peg på de fire hovedelementer:</div>
+          <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.5rem;">
+            <span class="badge badge-purple">Ugeoversigt</span>
+            <span class="badge badge-blue">Daglig konditionsgraf</span>
+            <span class="badge badge-green">Toiletbåse</span>
+            <span class="badge badge-orange">Rengøringsopgaver</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Vis live-opdateringer <span style="color:var(--text-4);font-weight:400;font-size:0.8rem;">— 2 min</span></div>
+          <div class="step-desc">Vent 30–60 sekunder. Hvert 25–45 sekund simuleres et nyt toiletbesøg automatisk. Vis hvad der sker live:</div>
+          <ul style="margin-top:0.5rem;padding-left:1.2rem;font-size:0.82rem;color:var(--text-3);line-height:1.8;">
+            <li>Et toiletkort viser <strong style="color:var(--orange);">"I brug"</strong> med en pulserende prik</li>
+            <li>Kort efter opdateres kortets farve og score-ring</li>
+            <li>Hvis tilstanden er forværret, dukker en ny <strong style="color:var(--red);">rengøringsopgave</strong> op på listen</li>
+          </ul>
+          <div class="info-box blue mt-2" style="font-size:0.8rem;">
+            <strong>Forklaringstekst til publikum:</strong> "Siden opdaterer sig selv — ingen behøver at genindlæse. Systemet sender automatisk besked til alle skærme, der er forbundet."
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Vis rengøringsopgavelisten <span style="color:var(--text-4);font-weight:400;font-size:0.8rem;">— 3 min</span></div>
+          <div class="step-desc">Klik på de tre knapper for en opgave og forklar hvad der sker:</div>
+          <div class="table-wrap mt-2">
+            <table>
+              <thead><tr><th>Knap</th><th>Hvad sker der i systemet</th><th>Hvad sker på dashboardet</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="badge badge-blue">Er på vej</span></td>
+                  <td>Opgaven registreres som "under behandling"</td>
+                  <td>Status ændres til blå pille — "Er på vej"</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge-green">Rengøring færdig</span></td>
+                  <td>En kvittering gemmes, toiletstatus nulstilles</td>
+                  <td>Opgaven forsvinder, toiletkortet bliver grønt</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge-gray">Intet behov</span></td>
+                  <td>Opgaven markeres som falsk alarm</td>
+                  <td>Opgaven fjernes fra listen</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Gennemgå ugeoversigten <span style="color:var(--text-4);font-weight:400;font-size:0.8rem;">— 2 min</span></div>
+          <div class="step-desc">Peg på de fem nøgletalkasser og forklar:</div>
+          <div class="table-wrap mt-2">
+            <table>
+              <thead><tr><th>Nøgletal</th><th>Hvad fortæller det os?</th></tr></thead>
+              <tbody>
+                <tr><td><strong style="color:var(--red);">Rengøringsbehov</strong></td><td>Hvor mange procent af besøgene resulterede i et snavset toilet. Jo lavere, jo bedre.</td></tr>
+                <tr><td><strong style="color:var(--orange);">Gns. rengøringstid</strong></td><td>Hvor lang tid der i gennemsnit går fra en opgave oprettes til den er færdig.</td></tr>
+                <tr><td><strong style="color:var(--green);">Rene besøg</strong></td><td>Andelen af besøg, hvor toilettet var rent både før og efter. Mål: så højt som muligt.</td></tr>
+                <tr><td><strong style="color:var(--blue);">Afventer rengøring</strong></td><td>Antal åbne opgaver, der ikke er løst endnu.</td></tr>
+                <tr><td><strong style="color:var(--purple);">Besøg denne uge</strong></td><td>Samlet trafik — nyttigt til at se spidsbelastningstider.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Vis API-dokumentationen (teknisk) <span style="color:var(--text-4);font-weight:400;font-size:0.8rem;">— 2 min</span></div>
+          <div class="step-desc">Åbn <code style="background:var(--surf-2);padding:1px 5px;border-radius:3px;font-size:0.78em;">http://localhost:5000/swagger</code> og vis systemets kommunikationsled. Peg særligt på:</div>
+          <ul style="margin-top:0.5rem;padding-left:1.2rem;font-size:0.82rem;color:var(--text-3);line-height:1.8;">
+            <li><code style="background:var(--surf-2);padding:1px 4px;border-radius:3px;font-size:0.85em;">POST /api/toilets/feed</code> — returnerer en fejl. Forklaring: live-videostream er bevidst blokeret for at beskytte privatlivet (krav FR-12).</li>
+            <li><code style="background:var(--surf-2);padding:1px 4px;border-radius:3px;font-size:0.85em;">GET /api/kpi/export</code> — eksporterer en uge- eller månedsrapport</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Spørgsmål ── -->
+  <div class="section">
+    <div class="section-title">Spørgsmål du kan forvente</div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+
+      <div class="card">
+        <div class="card-title" style="color:var(--blue-text);margin-bottom:0.4rem;">Hvorfor opdaterer dashboardet sig selv uden genindlæsning?</div>
+        <div class="card-desc">Vi bruger en teknologi kaldet SignalR, der ligner notifikationer på en mobiltelefon. Systemet sender automatisk en besked til dashboardet, når noget ændrer sig — i stedet for at dashboardet skal spørge hvert sekund.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--blue-text);margin-bottom:0.4rem;">Hvorfor er der ingen rigtig kamera og kortlæser?</div>
+        <div class="card-desc">Det fysiske hardware er uden for projektets scope. I stedet har vi bygget en automatisk testmotor, der simulerer præcis den samme datastrøm. Al software er fuldt implementeret og klar til at kobles på rigtigt hardware.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--blue-text);margin-bottom:0.4rem;">Er det ikke et problem for privatlivet?</div>
+        <div class="card-desc">Systemet er designet fra bunden med privatlivsbeskyttelse. Ingen person identificeres nogensinde. Kortets ID krypteres, videostream er blokeret i koden, og kameraet aktiveres kun i det sekund besøget starter og slutter.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--blue-text);margin-bottom:0.4rem;">Hvad mangler for at systemet er produktionsklart?</div>
+        <div class="card-desc">Primært tre ting: adgangskontrol (så kun autoriserede kan se dashboardet), rigtig hardware og et versionsstyret databaseopsætning. Selve forretningslogikken, dashboardet og datastrukturen er fuldt implementeret.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

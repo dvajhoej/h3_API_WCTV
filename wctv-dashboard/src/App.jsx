@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { StallGrid } from './components/StallGrid'
 import { TriggerList } from './components/TriggerList'
 import { KpiPanel } from './components/KpiPanel'
@@ -80,6 +80,43 @@ export default function App() {
 
   useEffect(() => { loadAll() }, [loadAll])
 
+  // Merge triggers into toilets so Toiletbåse and Rengøringsopgaver reflect the same data.
+  const triggersByToilet = useMemo(() => {
+    const byToilet = new Map()
+    const isBetter = (a, b) => {
+      const aAck = a.status === 'acknowledged' ? 1 : 0
+      const bAck = b.status === 'acknowledged' ? 1 : 0
+      if (aAck !== bAck) return aAck > bAck
+      const aSev = a.severity === 'forvaerring' ? 1 : 0
+      const bSev = b.severity === 'forvaerring' ? 1 : 0
+      if (aSev !== bSev) return aSev > bSev
+      return new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()
+    }
+
+    for (const t of triggers) {
+      const existing = byToilet.get(t.toiletId)
+      if (!existing || isBetter(t, existing)) {
+        byToilet.set(t.toiletId, t)
+      }
+    }
+    return byToilet
+  }, [triggers])
+
+  const toiletsForDisplay = useMemo(() => (
+    toilets.map(toilet => {
+      const trig = triggersByToilet.get(toilet.id)
+      if (!trig) return toilet
+
+      const statusKey = trig.severity === 'forvaerring' ? 'forvaerring' : 'let_forvaerring'
+      const baseStatus = toilet.status ?? { currentScore: null, lastUpdated: trig.createdAt }
+
+      return {
+        ...toilet,
+        status: { ...baseStatus, status: statusKey },
+      }
+    })
+  ), [toilets, triggersByToilet])
+
   // Refresh KPI + graph every 30 s
   useEffect(() => {
     const iv = setInterval(() => {
@@ -114,7 +151,7 @@ export default function App() {
     }, []),
 
     onTriggerCreated: useCallback(({ trigger }) => {
-      setTriggers(prev => [trigger, ...prev])
+      setTriggers(prev => [trigger, ...prev.filter(t => t.toiletId !== trigger.toiletId)])
       fetchKpi().then(setKpi).catch(console.error)
     }, []),
 
@@ -179,7 +216,7 @@ export default function App() {
         <>
           <KpiPanel kpi={kpi} />
           <DailyConditionGraph data={dailyData} />
-          <StallGrid toilets={toilets} />
+          <StallGrid toilets={toiletsForDisplay} />
           <TriggerList
             triggers={triggers}
             onAcknowledge={handleAcknowledge}

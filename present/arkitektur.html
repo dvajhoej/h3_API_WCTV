@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCTV — Systemets opbygning</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-home">
+    <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+      <rect x="2" y="8" width="28" height="18" rx="3" stroke="#3b82f6" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="5" stroke="#60a5fa" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="2" fill="#3b82f6"/>
+      <rect x="12" y="4" width="8" height="5" rx="1.5" stroke="#475569" stroke-width="1.5"/>
+      <circle cx="25" cy="12" r="1.5" fill="#22c55e"/>
+    </svg>
+    WCTV
+  </a>
+  <a href="overblik.html">Om projektet</a>
+  <a href="arkitektur.html" class="active">Systemet</a>
+  <a href="FLOWCHART.html">Besøgsforløb</a>
+  <a href="DB_RELATIONER.html">Database</a>
+  <a href="DATAFLOW_DB.html">Dataflow</a>
+  <a href="krav.html">Krav</a>
+  <a href="demo.html">Demo</a>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <span class="hero-tag">Systemets opbygning</span>
+    <h1>Hvordan er systemet sat sammen?</h1>
+    <p>WCTV er bygget i fire lag, der taler sammen — fra det fysiske udstyr på toilettet til dashboardet på skærmen.</p>
+  </div>
+
+  <!-- ── De fire lag ── -->
+  <div class="section">
+    <div class="section-title">Systemets fire lag</div>
+    <div class="layer-stack">
+
+      <div class="layer edge">
+        <div class="layer-icon">🔌</div>
+        <div class="layer-content">
+          <div class="layer-name">Lag 1 — Udstyr på stedet</div>
+          <div class="layer-parts">Adgangskortlæser · Kamera · Dørsensor &nbsp;·&nbsp; <em>Simuleret i dette projekt</em></div>
+        </div>
+      </div>
+
+      <div class="layer-arrow">↓ sender besøgsdata</div>
+
+      <div class="layer api">
+        <div class="layer-icon">⚙️</div>
+        <div class="layer-content">
+          <div class="layer-name">Lag 2 — Systemets hjerne (API)</div>
+          <div class="layer-parts">Modtager data · Beregner tilstandsscore · Gemmer i database · Sender beskeder til dashboard</div>
+        </div>
+      </div>
+
+      <div class="layer-arrow" style="display:flex;gap:4rem;justify-content:center;">
+        <span>↓ live-opdateringer</span>
+        <span>↓ nøgletal</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+        <div class="layer dash">
+          <div class="layer-icon">🖥️</div>
+          <div class="layer-content">
+            <div class="layer-name">Lag 3 — Dashboard</div>
+            <div class="layer-parts">Live-overblik · Rengøringsopgaver · Farvekodet status</div>
+          </div>
+        </div>
+        <div class="layer kpi">
+          <div class="layer-icon">📊</div>
+          <div class="layer-content">
+            <div class="layer-name">Lag 4 — Nøgletal og rapporter</div>
+            <div class="layer-parts">Ugentlige tal · Daglig konditionsgraf · Eksport</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="text-muted mt-2">Den stiplede forbindelse til udstyret skyldes, at kortlæser, kamera og dørsensor er simuleret i koden — ikke fysisk tilgængeligt i dette projekt.</p>
+  </div>
+
+  <!-- ── Live-opdateringer ── -->
+  <div class="section">
+    <div class="section-title">Live-opdateringer — hvordan holder dashboardet sig opdateret?</div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title" style="color:var(--text-1);margin-bottom:0.5rem;">Uden live-opdateringer</div>
+        <p style="font-size:0.83rem;color:var(--text-3);line-height:1.6;">
+          Dashboardet ville skulle genindlæse siden hvert sekund for at tjekke om noget er nyt. Det er langsomt og belaster systemet unødigt.
+        </p>
+      </div>
+      <div class="card" style="border-color:rgba(59,130,246,0.4);">
+        <div class="card-title" style="color:var(--blue-text);margin-bottom:0.5rem;">Med SignalR (vores løsning)</div>
+        <p style="font-size:0.83rem;color:var(--text-3);line-height:1.6;">
+          Systemet <strong style="color:var(--text-2);">skubber</strong> automatisk en besked til dashboardet, hver gang noget ændrer sig — præcis som en app der modtager notifikationer. Ingen unødig opdatering.
+        </p>
+      </div>
+    </div>
+    <div class="mt-2">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Hvad sker der</th><th>Hvornår</th><th>Effekt på dashboardet</th></tr></thead>
+          <tbody>
+            <tr><td>Nogen scanner kortet</td><td>Straks ved besøgsstart</td><td>Toiletkortet viser "I brug" (gul pulserende prik)</td></tr>
+            <tr><td>Besøget er slut</td><td>Når døren åbnes igen</td><td>"I brug"-markeringen forsvinder</td></tr>
+            <tr><td>Score og status beregnet</td><td>Sekunder efter besøget</td><td>Toiletkortets farve og score-ring opdateres</td></tr>
+            <tr><td>Forværring opdaget</td><td>Straks efter scoring</td><td>Ny rengøringsopgave dukker op på listen</td></tr>
+            <tr><td>Rengøring kvitteret</td><td>Når teamet trykker "færdig"</td><td>Opgaven forsvinder, kortet bliver grønt igen</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tilstandsvurdering ── -->
+  <div class="section">
+    <div class="section-title">Hvordan vurderer systemet toiletstanden?</div>
+    <div class="info-box blue mt-1" style="margin-bottom:1rem;">
+      <strong>Kort fortalt:</strong> Kameraet tager et billede <em>inden</em> besøget og et billede <em>efter</em>. Systemet sammenligner de to billeder og beregner, om toilettet er blevet mere snavset.
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Resultat</th><th>Hyppighed</th><th>Hvad sker der</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-green">Rent</span></td>
+            <td>78 % af besøg</td>
+            <td>Ingen handling — toiletkort forbliver grønt</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-orange">Lidt snavset</span></td>
+            <td>12 % af besøg</td>
+            <td>Rengøringsopgave med lav prioritet oprettes</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">Skal rengøres</span></td>
+            <td>7 % af besøg</td>
+            <td>Rengøringsopgave med høj prioritet oprettes</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-gray">Kontrollér</span></td>
+            <td>3 % af besøg</td>
+            <td>Systemet er usikkert — markeres til manuel kontrol</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-muted mt-2">Systemet viser også sin <strong>sikkerhedsprocent</strong> (0–100 %) — jo højere, jo mere sikker er vurderingen.</p>
+  </div>
+
+  <!-- ── Privatlivsbeskyttelse ── -->
+  <div class="section">
+    <div class="section-title">Privatlivsbeskyttelse — ingen overvåger nogen</div>
+    <div class="card-grid">
+      <div class="card">
+        <div style="font-size:1.4rem;margin-bottom:0.5rem;">🔒</div>
+        <div class="card-title">Ingen person identificeres</div>
+        <div class="card-desc">Adgangskortets ID krypteres, inden det gemmes. Der er ingen forbindelse mellem et besøg og en bestemt person.</div>
+      </div>
+      <div class="card">
+        <div style="font-size:1.4rem;margin-bottom:0.5rem;">📸</div>
+        <div class="card-title">Ingen videoovervågning</div>
+        <div class="card-desc">Kameraet aktiveres kun i det sekund, besøget starter og slutter. Der er intet løbende kamerastream — det er spærret i koden.</div>
+      </div>
+      <div class="card">
+        <div style="font-size:1.4rem;margin-bottom:0.5rem;">🚫</div>
+        <div class="card-title">Systemet ser stedet, ikke personen</div>
+        <div class="card-desc">Vurderingen handler udelukkende om toiletrummets tilstand — ikke om hvem der har brugt det.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Systemkomponent-diagram ── -->
+  <div class="section">
+    <div class="section-title">Komponentoversigt</div>
+    <div class="diagram-card">
+      <div class="diagram-label">Alle dele af systemet og hvordan de taler sammen</div>
+      <div class="mermaid">
+flowchart LR
+    subgraph Browser["🖥️ Skærm (dashboard)"]
+        UI["Visningsapp\nReact"]
+    end
+    subgraph API["⚙️ Systemets hjerne"]
+        REST["Kommunikationsled\nAPI-endpoints"]
+        HUB["Live-beskeder\nSignalR"]
+        MOTOR["Automatisk testmotor\n(simulerer besøg)"]
+        SCORE["Tilstandsvurdering\n(scorer før/efter)"]
+        EF["Database-forbindelse\nEF Core"]
+    end
+    DB[("💾 Database\nSQLite")]
+    UI -->|"Henter data"| REST
+    UI <-->|"Live-opdateringer"| HUB
+    REST --> EF
+    MOTOR --> SCORE
+    MOTOR --> EF
+    MOTOR --> HUB
+    EF --> DB
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true, theme: 'dark',
+    themeVariables: {
+      background: '#0f172a', primaryColor: '#1e3a5f',
+      primaryTextColor: '#e2e8f0', primaryBorderColor: '#3b82f6',
+      lineColor: '#475569', edgeLabelBackground: '#1e293b', fontSize: '13px'
+    },
+    flowchart: { curve: 'basis', useMaxWidth: true }
+  });
+</script>
+</body>
+</html>

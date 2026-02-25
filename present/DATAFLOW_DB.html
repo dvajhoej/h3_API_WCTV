@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCTV — Dataflow</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Flow-tabel ── */
+    .flow-row {
+      display: grid;
+      grid-template-columns: 1fr 28px 200px 28px 1fr;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .flow-row:hover .tbl-card { border-color: var(--border-2); }
+
+    .writers {
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 4px; padding: 0.5rem 0;
+    }
+    .write-evt { display: flex; align-items: center; gap: 0.4rem; }
+    .w-label      { font-size: 0.8rem; color: #bbf7d0; text-align: right; }
+    .w-label.patch { color: #fde68a; }
+    .w-label.seed  { color: var(--text-4); }
+    .w-sub   { font-size: 0.7rem; color: #6ee7b7; opacity: 0.75; text-align: right; padding-right: 0.3rem; }
+    .w-sub.patch   { color: #fcd34d; }
+
+    .arr { display: flex; align-items: center; justify-content: center; }
+    .no-arr { width: 28px; }
+
+    .tbl-col { display: flex; }
+    .tbl-card {
+      background: var(--surf-1); border: 1px solid var(--border);
+      border-radius: 10px; padding: 0.65rem 0.9rem;
+      width: 200px; transition: border-color 0.15s;
+    }
+    .tbl-name { font-size: 0.85rem; font-weight: 700; color: var(--text-1); text-align: center; margin-bottom: 0.4rem; }
+    .tbl-card.dim .tbl-name { color: var(--text-4); }
+    .flds { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; }
+    .f {
+      font-size: 0.62rem; background: var(--surf-2); border-radius: 3px;
+      padding: 1px 5px; color: var(--text-4); font-family: monospace;
+    }
+    .f.pk  { color: var(--blue-text);  background: var(--blue-dim);  }
+    .f.fk  { color: var(--green-text); background: var(--green-dim); }
+    .f.note { font-family: inherit; color: var(--text-4); background: transparent; font-size: 0.6rem; width: 100%; text-align: center; margin-top: 2px; }
+
+    .readers { display: flex; flex-direction: column; gap: 4px; padding: 0.5rem 0; }
+    .read-evt { display: flex; flex-direction: column; gap: 1px; }
+    .read-evt code { font-size: 0.75rem; color: var(--blue-text); background: var(--blue-dim); padding: 1px 6px; border-radius: 3px; width: fit-content; }
+    .read-evt span { font-size: 0.67rem; color: var(--text-4); padding-left: 2px; }
+    .read-evt.none code { color: var(--text-4); background: var(--surf-2); }
+
+    .db-badge {
+      font-size: 0.58rem; font-weight: 700; padding: 1px 5px;
+      border-radius: 3px; text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0;
+    }
+    .ins  { background: var(--green-dim); color: var(--green-text); border: 1px solid #166534; }
+    .upd  { background: var(--blue-dim);  color: var(--blue-text);  border: 1px solid #1d4ed8; }
+    .pat  { background: var(--orange-dim);color: var(--orange-text);border: 1px solid #92400e; }
+    .seed { background: var(--surf-2);    color: var(--text-4);     border: 1px solid var(--border-2); }
+
+    .col-hdrs {
+      display: grid; grid-template-columns: 1fr 28px 200px 28px 1fr;
+      margin-bottom: 0.4rem; padding: 0 0.2rem;
+    }
+    .col-hdrs span {
+      font-size: 0.62rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-4); font-weight: 600;
+    }
+    .col-hdrs span:nth-child(1) { text-align: right; padding-right: 1.2rem; }
+    .col-hdrs span:nth-child(3) { text-align: center; }
+    .col-hdrs span:nth-child(5) { padding-left: 1.2rem; }
+  </style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-home">
+    <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+      <rect x="2" y="8" width="28" height="18" rx="3" stroke="#3b82f6" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="5" stroke="#60a5fa" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="2" fill="#3b82f6"/>
+      <rect x="12" y="4" width="8" height="5" rx="1.5" stroke="#475569" stroke-width="1.5"/>
+      <circle cx="25" cy="12" r="1.5" fill="#22c55e"/>
+    </svg>
+    WCTV
+  </a>
+  <a href="overblik.html">Om projektet</a>
+  <a href="arkitektur.html">Systemet</a>
+  <a href="FLOWCHART.html">Besøgsforløb</a>
+  <a href="DB_RELATIONER.html">Database</a>
+  <a href="DATAFLOW_DB.html" class="active">Dataflow</a>
+  <a href="krav.html">Krav</a>
+  <a href="demo.html">Demo</a>
+</nav>
+
+<div class="page-wide">
+
+  <div class="hero">
+    <span class="hero-tag">Dataflow</span>
+    <h1>Hvad gemmes hvornår — og hvem henter det?</h1>
+    <p>Diagrammet viser, hvilke dele af systemet der skriver til databasen, og hvilke der læser data derfra til dashboardet.</p>
+  </div>
+
+  <!-- ── Farveforklaring ── -->
+  <div class="section">
+    <div class="section-title">Farveforklaring</div>
+    <div style="display:flex;gap:1.25rem;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:var(--text-3);">
+        <span class="db-badge ins">Gemmer</span> Systemet skriver automatisk
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:var(--text-3);">
+        <span class="db-badge upd">Opdaterer</span> Systemet ændrer eksisterende data
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:var(--text-3);">
+        <span class="db-badge pat">Handling</span> Rengøringsteamet trykker en knap
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:var(--text-3);">
+        <span class="db-badge seed">Opstartsdata</span> Indlæst én gang ved første start
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Flow-diagram ── -->
+  <div class="section">
+    <div class="col-hdrs">
+      <span>SKRIVES AF</span><span></span><span>TABEL</span><span></span><span>LÆSES AF</span>
+    </div>
+
+    <!-- Toilet -->
+    <div class="flow-row">
+      <div class="writers">
+        <div class="write-evt"><span class="w-label seed">Opstartsdata (én gang)</span><span class="db-badge seed">Opstartsdata</span></div>
+      </div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="0" y1="7" x2="20" y2="7" stroke="#334155" stroke-width="1.5"/><polyline points="15,3 22,7 15,11" fill="none" stroke="#334155" stroke-width="1.5"/></svg></div>
+      <div class="tbl-col"><div class="tbl-card"><div class="tbl-name">Toilet</div><div class="flds"><span class="f pk">Id</span><span class="f">Navn</span><span class="f">Lokation</span><span class="f">Båsnummer</span></div></div></div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="6" y1="7" x2="28" y2="7" stroke="#1d4ed8" stroke-width="1.5"/><polyline points="22,3 30,7 22,11" fill="none" stroke="#1d4ed8" stroke-width="1.5"/></svg></div>
+      <div class="readers">
+        <div class="read-evt"><code>Dashboard — toiletkort</code><span>navn og lokation pr. bås</span></div>
+        <div class="read-evt"><code>Ugeoversigt (KPI)</code><span>facility-reference</span></div>
+      </div>
+    </div>
+
+    <!-- ToiletStatus -->
+    <div class="flow-row">
+      <div class="writers">
+        <div class="write-evt"><span class="w-label">⑤ Systemet — score opdateres</span><span class="db-badge upd">Opdaterer</span></div>
+        <div class="write-evt"><span class="w-label patch">Knap: "Rengøring færdig" → nulstilles</span><span class="db-badge pat">Handling</span></div>
+      </div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="0" y1="7" x2="20" y2="7" stroke="#334155" stroke-width="1.5"/><polyline points="15,3 22,7 15,11" fill="none" stroke="#334155" stroke-width="1.5"/></svg></div>
+      <div class="tbl-col"><div class="tbl-card"><div class="tbl-name">Toiletstatus</div><div class="flds"><span class="f pk">ToiletId</span><span class="f">AktuelScore</span><span class="f">Status</span><span class="f">SidstOpdateret</span></div></div></div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="6" y1="7" x2="28" y2="7" stroke="#1d4ed8" stroke-width="1.5"/><polyline points="22,3 30,7 22,11" fill="none" stroke="#1d4ed8" stroke-width="1.5"/></svg></div>
+      <div class="readers">
+        <div class="read-evt"><code>Dashboard — toiletkort</code><span>farve, score-ring og status</span></div>
+      </div>
+    </div>
+
+    <!-- Besøg -->
+    <div class="flow-row">
+      <div class="writers">
+        <div class="write-evt"><span class="w-label">① Kortscanning — besøg starter</span><span class="db-badge ins">Gemmer</span></div>
+        <div class="w-sub">+ opdateres med sluttidspunkt, når besøget afsluttes</div>
+      </div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="0" y1="7" x2="20" y2="7" stroke="#334155" stroke-width="1.5"/><polyline points="15,3 22,7 15,11" fill="none" stroke="#334155" stroke-width="1.5"/></svg></div>
+      <div class="tbl-col"><div class="tbl-card"><div class="tbl-name">Besøg</div><div class="flds"><span class="f pk">Id</span><span class="f fk">ToiletId</span><span class="f">StartetKl</span><span class="f">SluttetKl</span><span class="f">Status</span></div></div></div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="6" y1="7" x2="28" y2="7" stroke="#1d4ed8" stroke-width="1.5"/><polyline points="22,3 30,7 22,11" fill="none" stroke="#1d4ed8" stroke-width="1.5"/></svg></div>
+      <div class="readers">
+        <div class="read-evt"><code>Dashboard — "I brug"</code><span>aktivt besøg viser pulserende prik</span></div>
+        <div class="read-evt"><code>Ugeoversigt (KPI)</code><span>antal besøg denne uge</span></div>
+        <div class="read-evt"><code>Daglig konditionsgraf</code><span>besøg per time</span></div>
+      </div>
+    </div>
+
+    <!-- Billede -->
+    <div class="flow-row">
+      <div class="writers">
+        <div class="write-evt"><span class="w-label">② Kamera — "før"-billede</span><span class="db-badge ins">Gemmer</span></div>
+        <div class="write-evt"><span class="w-label">③ Kamera — "efter"-billede</span><span class="db-badge ins">Gemmer</span></div>
+      </div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="0" y1="7" x2="20" y2="7" stroke="#334155" stroke-width="1.5"/><polyline points="15,3 22,7 15,11" fill="none" stroke="#334155" stroke-width="1.5"/></svg></div>
+      <div class="tbl-col"><div class="tbl-card dim"><div class="tbl-name">Billede</div><div class="flds"><span class="f pk">Id</span><span class="f fk">BesøgId</span><span class="f">Type</span><span class="f">Score</span><span class="f">Sikkerhed</span><span class="f note">scores — ikke selve billedet</span></div></div></div>
+      <div class="no-arr"></div>
+      <div class="readers"><div class="read-evt none"><code>— bruges internt</code><span>scores videreføres til Tilstandsvurdering</span></div></div>
+    </div>
+
+    <!-- Tilstandsvurdering -->
+    <div class="flow-row">
+      <div class="writers">
+        <div class="write-evt"><span class="w-label">④ Systemet sammenligner billeder</span><span class="db-badge ins">Gemmer</span></div>
+        <div class="w-sub">FørScore · EfterScore · Sikkerhedsprocent · Resultat</div>
+      </div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="0" y1="7" x2="20" y2="7" stroke="#334155" stroke-width="1.5"/><polyline points="15,3 22,7 15,11" fill="none" stroke="#334155" stroke-width="1.5"/></svg></div>
+      <div class="tbl-col"><div class="tbl-card"><div class="tbl-name">Tilstandsvurdering</div><div class="flds"><span class="f pk">Id</span><span class="f fk">BesøgId</span><span class="f">FørScore</span><span class="f">EfterScore</span><span class="f">Sikkerhed</span><span class="f">Resultat</span></div></div></div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="6" y1="7" x2="28" y2="7" stroke="#1d4ed8" stroke-width="1.5"/><polyline points="22,3 30,7 22,11" fill="none" stroke="#1d4ed8" stroke-width="1.5"/></svg></div>
+      <div class="readers">
+        <div class="read-evt"><code>Ugeoversigt (KPI)</code><span>rengøringsbehov og rene besøg</span></div>
+        <div class="read-evt"><code>Daglig konditionsgraf</code><span>gennemsnitsscore per time</span></div>
+      </div>
+    </div>
+
+    <!-- Rengøringsopgave -->
+    <div class="flow-row">
+      <div class="writers">
+        <div class="write-evt"><span class="w-label">⑥ Systemet — forværring opdaget</span><span class="db-badge ins">Gemmer</span></div>
+        <div class="write-evt"><span class="w-label patch">Knap: "Er på vej"</span><span class="db-badge pat">Handling</span></div>
+        <div class="write-evt"><span class="w-label patch">Knap: "Rengøring færdig"</span><span class="db-badge pat">Handling</span></div>
+        <div class="write-evt"><span class="w-label patch">Knap: "Intet behov"</span><span class="db-badge pat">Handling</span></div>
+      </div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="0" y1="7" x2="20" y2="7" stroke="#334155" stroke-width="1.5"/><polyline points="15,3 22,7 15,11" fill="none" stroke="#334155" stroke-width="1.5"/></svg></div>
+      <div class="tbl-col"><div class="tbl-card"><div class="tbl-name">Rengøringsopgave</div><div class="flds"><span class="f pk">Id</span><span class="f fk">ToiletId</span><span class="f">Prioritet</span><span class="f">Status</span><span class="f">Sikkerhed</span><span class="f">OprettetKl</span></div></div></div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="6" y1="7" x2="28" y2="7" stroke="#1d4ed8" stroke-width="1.5"/><polyline points="22,3 30,7 22,11" fill="none" stroke="#1d4ed8" stroke-width="1.5"/></svg></div>
+      <div class="readers">
+        <div class="read-evt"><code>Dashboard — opgaveliste</code><span>nye og igangværende opgaver</span></div>
+        <div class="read-evt"><code>Ugeoversigt (KPI)</code><span>åbne opgaver og responstid</span></div>
+      </div>
+    </div>
+
+    <!-- Kvittering -->
+    <div class="flow-row">
+      <div class="writers">
+        <div class="write-evt"><span class="w-label patch">Knap: "Rengøring færdig"</span><span class="db-badge pat">Gemmer</span></div>
+        <div class="w-sub patch">oprettes kun ved afsluttet rengøring</div>
+      </div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="0" y1="7" x2="20" y2="7" stroke="#334155" stroke-width="1.5"/><polyline points="15,3 22,7 15,11" fill="none" stroke="#334155" stroke-width="1.5"/></svg></div>
+      <div class="tbl-col"><div class="tbl-card dim"><div class="tbl-name">Kvittering</div><div class="flds"><span class="f pk">Id</span><span class="f fk">OpgaveId</span><span class="f">FærdigKl</span><span class="f">Notat</span><span class="f note">dokumenterer afsluttet rengøring</span></div></div></div>
+      <div class="no-arr"></div>
+      <div class="readers"><div class="read-evt none"><code>— intern kvittering</code><span>bruges til at beregne responstid</span></div></div>
+    </div>
+
+    <!-- Hændelseslog -->
+    <div class="flow-row">
+      <div class="writers">
+        <div class="write-evt"><span class="w-label">Systemet — løbende hændelser</span><span class="db-badge ins">Gemmer</span></div>
+      </div>
+      <div class="arr"><svg width="28" height="14" viewBox="0 0 28 14"><line x1="0" y1="7" x2="20" y2="7" stroke="#334155" stroke-width="1.5"/><polyline points="15,3 22,7 15,11" fill="none" stroke="#334155" stroke-width="1.5"/></svg></div>
+      <div class="tbl-col"><div class="tbl-card dim"><div class="tbl-name">Hændelseslog</div><div class="flds"><span class="f pk">Id</span><span class="f">HændelsesType</span><span class="f">ToiletId</span><span class="f">BesøgId</span><span class="f">LoggetKl</span><span class="f note">kun til fejlfinding og revision</span></div></div></div>
+      <div class="no-arr"></div>
+      <div class="readers"><div class="read-evt none"><code>— audit trail</code><span>læses ikke af dashboardet</span></div></div>
+    </div>
+
+  </div>
+
+  <!-- ── Bundnote ── -->
+  <div class="info-box blue">
+    <strong>Live-opdateringer:</strong> Hver gang systemet gemmer eller opdaterer data i forbindelse med et besøg eller en rengøringsopgave, sendes der automatisk en live-besked til alle tilkoblede dashboards. Skærmen opdaterer sig selv — ingen genindlæsning nødvendig.
+  </div>
+
+</div>
+</body>
+</html>

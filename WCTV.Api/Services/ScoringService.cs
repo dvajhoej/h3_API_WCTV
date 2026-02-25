@@ -28,15 +28,15 @@ public class ScoringService
             confidence = 0.20f + (float)_rng.NextDouble() * 0.39f; // < 0.60
             delta = (float)(_rng.NextDouble() * 0.1 - 0.05);
         }
-        else if (roll < 0.15) // 12% forvaerring
+        else if (roll < 0.10) // 7% forvaerring
         {
             delta = -(0.26f + (float)_rng.NextDouble() * 0.24f);
         }
-        else if (roll < 0.35) // 20% let_forvaerring
+        else if (roll < 0.22) // 12% let_forvaerring
         {
             delta = -(0.10f + (float)_rng.NextDouble() * 0.15f);
         }
-        else // 65% ok
+        else // 78% ok
         {
             delta = (float)(_rng.NextDouble() * 0.10 - 0.02);
         }

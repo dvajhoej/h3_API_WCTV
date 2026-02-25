@@ -1,0 +1,326 @@
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Tokens ── */
+:root {
+  --bg:        #090e1a;
+  --surf-1:    #0f172a;
+  --surf-2:    #1e293b;
+  --surf-3:    #334155;
+  --border:    #1e293b;
+  --border-2:  #334155;
+  --text-1:    #f1f5f9;
+  --text-2:    #cbd5e1;
+  --text-3:    #94a3b8;
+  --text-4:    #475569;
+  --green:     #22c55e;  --green-dim:   #14532d;  --green-text:  #bbf7d0;
+  --blue:      #3b82f6;  --blue-dim:    #172554;  --blue-text:   #bfdbfe;
+  --orange:    #f59e0b;  --orange-dim:  #431407;  --orange-text: #fde68a;
+  --red:       #ef4444;  --red-dim:     #450a0a;  --red-text:    #fecaca;
+  --purple:    #a855f7;  --purple-dim:  #3b0764;  --purple-text: #e9d5ff;
+}
+
+/* ── Base ── */
+body {
+  background: var(--bg);
+  color: var(--text-2);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Navigation ── */
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(9, 14, 26, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 2rem;
+  height: 52px;
+  overflow-x: auto;
+}
+.topnav .nav-home {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--text-1);
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  padding-right: 1rem;
+  border-right: 1px solid var(--border);
+  margin-right: 0.5rem;
+}
+.topnav .nav-home svg { flex-shrink: 0; }
+.topnav a:not(.nav-home) {
+  text-decoration: none;
+  color: var(--text-3);
+  font-size: 0.82rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: color 0.15s, background 0.15s;
+}
+.topnav a:not(.nav-home):hover { color: var(--text-1); background: var(--surf-2); }
+.topnav a.active { color: var(--text-1); background: var(--surf-2); }
+
+/* ── Page wrapper ── */
+.page { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+.page-wide { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+/* ── Page hero ── */
+.hero {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+.hero-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-4);
+  margin-bottom: 0.6rem;
+}
+.hero h1 { font-size: 1.9rem; font-weight: 800; color: var(--text-1); letter-spacing: -0.02em; line-height: 1.2; }
+.hero p  { font-size: 1rem; color: var(--text-3); margin-top: 0.5rem; max-width: 600px; }
+
+/* ── Section ── */
+.section { margin-bottom: 2.5rem; }
+.section-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-4);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--surf-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.4rem;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+a.card-link {
+  display: block;
+  background: var(--surf-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.4rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+}
+a.card-link:hover { border-color: var(--border-2); background: #111827; transform: translateY(-2px); }
+a.card-link:active { transform: translateY(0); }
+.card-icon { font-size: 1.6rem; margin-bottom: 0.6rem; line-height: 1; }
+.card-title { font-size: 0.95rem; font-weight: 700; color: var(--text-1); margin-bottom: 0.3rem; }
+.card-desc  { font-size: 0.8rem; color: var(--text-3); line-height: 1.55; }
+
+/* ── Role cards (horizontal) ── */
+.role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.role-card {
+  background: var(--surf-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem;
+}
+.role-icon  { font-size: 1.8rem; margin-bottom: 0.5rem; }
+.role-name  { font-size: 0.95rem; font-weight: 700; color: var(--text-1); margin-bottom: 0.25rem; }
+.role-label { font-size: 0.72rem; color: var(--text-4); margin-bottom: 0.5rem; }
+.role-desc  { font-size: 0.8rem; color: var(--text-3); line-height: 1.5; }
+
+/* ── Badges ── */
+.badge {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+.badge-green  { background: var(--green-dim);  color: var(--green-text); }
+.badge-blue   { background: var(--blue-dim);   color: var(--blue-text);  }
+.badge-orange { background: var(--orange-dim); color: var(--orange-text);}
+.badge-red    { background: var(--red-dim);    color: var(--red-text);   }
+.badge-purple { background: var(--purple-dim); color: var(--purple-text);}
+.badge-gray   { background: var(--surf-2);     color: var(--text-3);     }
+
+/* ── Status badges (for krav) ── */
+.status { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 600; }
+.status-ok   { color: var(--green); }
+.status-part { color: var(--orange); }
+.status-no   { color: var(--red); }
+
+/* ── Tables ── */
+.table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+thead th {
+  background: var(--surf-1);
+  color: var(--text-4);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 600;
+  padding: 0.7rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+tbody td {
+  padding: 0.75rem 1rem;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(255,255,255,0.02); }
+td code, th code {
+  background: var(--surf-2);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.78em;
+  color: var(--text-3);
+}
+
+/* ── Info boxes ── */
+.info-box {
+  padding: 1rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  border-left: 3px solid;
+}
+.info-box.green  { background: rgba(34,197,94,0.08);  border-color: var(--green);  color: var(--text-2); }
+.info-box.blue   { background: rgba(59,130,246,0.08); border-color: var(--blue);   color: var(--text-2); }
+.info-box.orange { background: rgba(245,158,11,0.08); border-color: var(--orange); color: var(--text-2); }
+.info-box strong { color: var(--text-1); }
+
+/* ── Step list ── */
+.step-list { display: flex; flex-direction: column; gap: 1rem; }
+.step {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--surf-2);
+  color: var(--blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.step-body { flex: 1; }
+.step-title { font-weight: 600; color: var(--text-1); font-size: 0.9rem; margin-bottom: 0.2rem; }
+.step-desc  { font-size: 0.82rem; color: var(--text-3); }
+
+/* ── Code block ── */
+.code-block {
+  background: var(--surf-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.82rem;
+  color: var(--text-3);
+  overflow-x: auto;
+  line-height: 1.7;
+}
+.code-block .comment { color: var(--text-4); }
+.code-block .cmd     { color: var(--blue-text); }
+.code-block .path    { color: var(--green-text); }
+
+/* ── Layer diagram (arkitektur) ── */
+.layer-stack { display: flex; flex-direction: column; gap: 0.5rem; }
+.layer {
+  border-radius: 10px;
+  padding: 1.1rem 1.4rem;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.layer-arrow { text-align: center; font-size: 1.2rem; color: var(--text-4); padding: 0.1rem 0; }
+.layer-icon  { font-size: 1.6rem; flex-shrink: 0; }
+.layer-content {}
+.layer-name  { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+.layer-parts { font-size: 0.78rem; opacity: 0.75; }
+.layer.edge     { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.3); }
+.layer.api      { background: rgba(34,197,94,0.08);  border-color: rgba(34,197,94,0.3);  }
+.layer.dash     { background: rgba(168,85,247,0.08); border-color: rgba(168,85,247,0.3); }
+.layer.kpi      { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.3); }
+.layer.edge  .layer-name { color: var(--blue-text); }
+.layer.api   .layer-name { color: var(--green-text); }
+.layer.dash  .layer-name { color: var(--purple-text); }
+.layer.kpi   .layer-name { color: var(--orange-text); }
+
+/* ── Stat row (krav summary) ── */
+.stat-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.stat-box {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surf-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  text-align: center;
+}
+.stat-num  { font-size: 2rem; font-weight: 800; line-height: 1; margin-bottom: 0.3rem; }
+.stat-desc { font-size: 0.75rem; color: var(--text-4); }
+.stat-box.green  .stat-num { color: var(--green); }
+.stat-box.orange .stat-num { color: var(--orange); }
+.stat-box.red    .stat-num { color: var(--red); }
+
+/* ── Mermaid diagram panels ── */
+.diagram-card {
+  background: var(--surf-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  overflow-x: auto;
+}
+.diagram-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-4);
+  margin-bottom: 1.25rem;
+}
+.mermaid { display: flex; justify-content: center; }
+
+/* ── Utilities ── */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.gap-1 { gap: 0.5rem; }
+.text-muted { color: var(--text-4); font-size: 0.8rem; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surf-3); border-radius: 3px; }

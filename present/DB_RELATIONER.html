@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCTV — Databasestruktur</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-home">
+    <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+      <rect x="2" y="8" width="28" height="18" rx="3" stroke="#3b82f6" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="5" stroke="#60a5fa" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="2" fill="#3b82f6"/>
+      <rect x="12" y="4" width="8" height="5" rx="1.5" stroke="#475569" stroke-width="1.5"/>
+      <circle cx="25" cy="12" r="1.5" fill="#22c55e"/>
+    </svg>
+    WCTV
+  </a>
+  <a href="overblik.html">Om projektet</a>
+  <a href="arkitektur.html">Systemet</a>
+  <a href="FLOWCHART.html">Besøgsforløb</a>
+  <a href="DB_RELATIONER.html" class="active">Database</a>
+  <a href="DATAFLOW_DB.html">Dataflow</a>
+  <a href="krav.html">Krav</a>
+  <a href="demo.html">Demo</a>
+</nav>
+
+<div class="page-wide">
+
+  <div class="hero">
+    <span class="hero-tag">Databasestruktur</span>
+    <h1>Hvad gemmer systemet?</h1>
+    <p>Databasen indeholder 8 sammenkoblede tabeller. Her kan du se, hvad de indeholder, og hvordan de hænger sammen.</p>
+  </div>
+
+  <!-- ── ER Diagram ── -->
+  <div class="section">
+    <div class="diagram-card">
+      <div class="diagram-label">Oversigt over tabeller og sammenhænge — stiplede linjer er løse referencer (ikke håndhævede)</div>
+      <div class="mermaid">
+erDiagram
+    TOILET {
+        int Id PK
+        string Navn
+        string Lokation
+        int BåsNummer
+        datetime OprettetDato
+    }
+    TOILETSTATUS {
+        int ToiletId PK
+        float AktuelScore
+        string Status
+        datetime SidstOpdateret
+    }
+    BESØG {
+        int Id PK
+        int ToiletId FK
+        datetime StartetKl
+        datetime SluttetKl
+        string AfslutningsÅrsag
+        string Status
+    }
+    BILLEDE {
+        int Id PK
+        int BesøgId FK
+        string Type
+        float Score
+        float Sikkerhed
+        datetime TagetKl
+    }
+    TILSTANDSVURDERING {
+        int Id PK
+        int BesøgId FK
+        float FørScore
+        float EfterScore
+        float Sikkerhed
+        string Resultat
+        datetime VurderetKl
+    }
+    RENGØRINGSOPGAVE {
+        int Id PK
+        int ToiletId FK
+        int BesøgId
+        string Prioritet
+        string Status
+        float Sikkerhed
+        datetime OprettetKl
+        datetime PåbegyndtKl
+    }
+    KVITTERING {
+        int Id PK
+        int OpgaveId FK
+        datetime FærddigKl
+        string Notat
+    }
+    HÆNDELSESLOG {
+        int Id PK
+        string HændelsesType
+        int ToiletId
+        int BesøgId
+        string Data
+        datetime LoggetKl
+    }
+
+    TOILET               ||--||  TOILETSTATUS       : "aktuel status"
+    TOILET               ||--o{  BESØG              : "har besøg"
+    TOILET               ||--o{  RENGØRINGSOPGAVE   : "har opgaver"
+    BESØG                ||--o{  BILLEDE            : "før + efter"
+    BESØG                ||--o|  TILSTANDSVURDERING : "vurdering"
+    RENGØRINGSOPGAVE     ||--o|  KVITTERING         : "kvitteres"
+    TOILET               }o..o{  HÆNDELSESLOG       : "log"
+    BESØG                }o..o{  HÆNDELSESLOG       : "log"
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tabel-forklaringer ── -->
+  <div class="section">
+    <div class="section-title">Hvad indeholder hver tabel?</div>
+    <div class="card-grid">
+
+      <div class="card" style="border-left:3px solid var(--blue);">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.2rem;">🚽</span>
+          <div class="card-title">Toilet</div>
+          <span class="badge badge-blue" style="margin-left:auto;">Stamdata</span>
+        </div>
+        <div class="card-desc">Grundoplysninger om hver toiletbås: navn, lokation og båsnummer. Disse data ændrer sig sjældent.</div>
+      </div>
+
+      <div class="card" style="border-left:3px solid var(--green);">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.2rem;">🟢</span>
+          <div class="card-title">Toiletstatus</div>
+          <span class="badge badge-green" style="margin-left:auto;">Live tilstand</span>
+        </div>
+        <div class="card-desc">Den aktuelle score og tilstand for hvert toilet — opdateres efter hvert besøg. Én statuspost pr. toilet.</div>
+      </div>
+
+      <div class="card" style="border-left:3px solid var(--orange);">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.2rem;">👣</span>
+          <div class="card-title">Besøg</div>
+          <span class="badge badge-orange" style="margin-left:auto;">Hændelse</span>
+        </div>
+        <div class="card-desc">Registrerer hvert enkelt anonymt besøg med start- og sluttidspunkt. Indeholder ingen personoplysninger.</div>
+      </div>
+
+      <div class="card" style="border-left:3px solid var(--purple);">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.2rem;">📸</span>
+          <div class="card-title">Billede</div>
+          <span class="badge badge-purple" style="margin-left:auto;">Snapshot-data</span>
+        </div>
+        <div class="card-desc">Gemmer resultatet af hvert kamera-snapshot (score og sikkerhed) — ikke selve billedet. To poster pr. besøg: "før" og "efter".</div>
+      </div>
+
+      <div class="card" style="border-left:3px solid #ec4899;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.2rem;">🤖</span>
+          <div class="card-title">Tilstandsvurdering</div>
+          <span class="badge" style="background:#4a044e;color:#f0abfc;margin-left:auto;">AI-scoring</span>
+        </div>
+        <div class="card-desc">Resultatet af sammenligningen: Hvilken score havde toilettet før og efter? Blev det forværret? Hvor sikker er systemet på sin vurdering?</div>
+      </div>
+
+      <div class="card" style="border-left:3px solid var(--red);">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.2rem;">🔴</span>
+          <div class="card-title">Rengøringsopgave</div>
+          <span class="badge badge-red" style="margin-left:auto;">Handling krævet</span>
+        </div>
+        <div class="card-desc">Oprettes, når systemet registrerer en forværring. Har status: <em>ny</em> → <em>er på vej</em> → <em>færdig</em> (eller <em>fejlvurdering</em>).</div>
+      </div>
+
+      <div class="card" style="border-left:3px solid #a855f7;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.2rem;">✅</span>
+          <div class="card-title">Kvittering</div>
+          <span class="badge badge-purple" style="margin-left:auto;">Bevis for rengøring</span>
+        </div>
+        <div class="card-desc">Oprettes, når rengøringsteamet trykker "Rengøring færdig". Dokumenterer hvornår rengøringen blev udført.</div>
+      </div>
+
+      <div class="card" style="border-left:3px solid var(--text-4);">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <span style="font-size:1.2rem;">📋</span>
+          <div class="card-title">Hændelseslog</div>
+          <span class="badge badge-gray" style="margin-left:auto;">Audit trail</span>
+        </div>
+        <div class="card-desc">En kronologisk log over vigtige hændelser i systemet — til fejlfinding og revision. Læses ikke af dashboardet i denne prototype.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Status-oversigt ── -->
+  <div class="section">
+    <div class="section-title">Rengøringsopgavens mulige tilstande</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tilstand</th><th>Hvad betyder det?</th><th>Hvem sætter den?</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-red">Ny opgave</span></td><td>Opgaven er oprettet og venter på at blive taget</td><td>Systemet automatisk</td></tr>
+          <tr><td><span class="badge badge-blue">Er på vej</span></td><td>Et teammedlem har påtaget sig opgaven</td><td>Rengøringsteamet (knap)</td></tr>
+          <tr><td><span class="badge badge-green">Færdig</span></td><td>Rengøringen er udført og kvitteret</td><td>Rengøringsteamet (knap)</td></tr>
+          <tr><td><span class="badge badge-gray">Fejlvurdering</span></td><td>Systemet vurderede forkert — ingen rengøring nødvendig</td><td>Rengøringsteamet (knap)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true, theme: 'dark',
+    themeVariables: {
+      background: '#0f172a', primaryColor: '#1e3a5f',
+      primaryTextColor: '#e2e8f0', primaryBorderColor: '#3b82f6',
+      lineColor: '#60a5fa', edgeLabelBackground: '#1e293b', fontSize: '13px'
+    },
+    er: { diagramPadding: 30, useMaxWidth: true }
+  });
+</script>
+</body>
+</html>

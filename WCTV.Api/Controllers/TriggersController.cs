@@ -26,6 +26,15 @@ public class TriggersController : ControllerBase
         var triggers = await _db.CleaningTriggers
             .Include(t => t.Toilet)
             .Where(t => t.Status == "active" || t.Status == "acknowledged")
+            .ToListAsync();
+
+        var deduped = triggers
+            .GroupBy(t => t.ToiletId)
+            .Select(g => g
+                .OrderByDescending(t => t.Status == "acknowledged")
+                .ThenByDescending(t => t.Severity == "forvaerring")
+                .ThenByDescending(t => t.CreatedAt)
+                .First())
             .OrderByDescending(t => t.Severity == "forvaerring")
             .ThenBy(t => t.CreatedAt)
             .Select(t => new
@@ -39,9 +48,9 @@ public class TriggersController : ControllerBase
                 t.CreatedAt,
                 t.AcknowledgedAt
             })
-            .ToListAsync();
+            .ToList();
 
-        return Ok(triggers);
+        return Ok(deduped);
     }
 
     [HttpPatch("{id}/acknowledge")]

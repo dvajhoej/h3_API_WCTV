@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCTV — Krav og resultater</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-home">
+    <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+      <rect x="2" y="8" width="28" height="18" rx="3" stroke="#3b82f6" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="5" stroke="#60a5fa" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="2" fill="#3b82f6"/>
+      <rect x="12" y="4" width="8" height="5" rx="1.5" stroke="#475569" stroke-width="1.5"/>
+      <circle cx="25" cy="12" r="1.5" fill="#22c55e"/>
+    </svg>
+    WCTV
+  </a>
+  <a href="overblik.html">Om projektet</a>
+  <a href="arkitektur.html">Systemet</a>
+  <a href="FLOWCHART.html">Besøgsforløb</a>
+  <a href="DB_RELATIONER.html">Database</a>
+  <a href="DATAFLOW_DB.html">Dataflow</a>
+  <a href="krav.html" class="active">Krav</a>
+  <a href="demo.html">Demo</a>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <span class="hero-tag">Krav og resultater</span>
+    <h1>Har vi opfyldt kravene?</h1>
+    <p>Vi har arbejdet ud fra en kravspecifikation med tre typer krav. Her er status på hvert enkelt.</p>
+  </div>
+
+  <!-- ── Opsummering ── -->
+  <div class="section">
+    <div class="section-title">Overblik</div>
+    <div class="stat-row">
+      <div class="stat-box green">
+        <div class="stat-num">7</div>
+        <div class="stat-desc">Funktionelle krav<br>fuldt opfyldt</div>
+      </div>
+      <div class="stat-box orange">
+        <div class="stat-num">3</div>
+        <div class="stat-desc">Krav opfyldt med<br>simulering</div>
+      </div>
+      <div class="stat-box red">
+        <div class="stat-num">1</div>
+        <div class="stat-desc">Krav ikke<br>implementeret</div>
+      </div>
+    </div>
+    <div class="info-box orange">
+      <strong>Hvad betyder "simuleret"?</strong> Tre krav forudsætter fysisk hardware — kortlæser, kamera og dørsensor — som vi ikke har haft adgang til. I stedet kører en automatisk testmotor, der simulerer præcis den samme datastrøm. Al software bag kravene er fuldt implementeret.
+    </div>
+  </div>
+
+  <!-- ── Forklaring af kravtyper ── -->
+  <div class="section">
+    <div class="section-title">De tre kravtyper</div>
+    <div class="card-grid">
+      <div class="card">
+        <span class="badge badge-blue" style="margin-bottom:0.6rem;">FR — Funktionelle krav</span>
+        <div class="card-desc">Beskriver <strong style="color:var(--text-2);">hvad systemet skal kunne</strong> — fx "systemet skal sende en rengøringsopgave, når toilettet er forværret." Der er 11 funktionelle krav i alt.</div>
+      </div>
+      <div class="card">
+        <span class="badge badge-purple" style="margin-bottom:0.6rem;">NFR — Ikke-funktionelle krav</span>
+        <div class="card-desc">Beskriver <strong style="color:var(--text-2);">hvor godt systemet skal virke</strong> — fx svartider, oppetid og sikkerhed. Der er 4 ikke-funktionelle krav.</div>
+      </div>
+      <div class="card">
+        <span class="badge badge-orange" style="margin-bottom:0.6rem;">KPI — Nøgletal</span>
+        <div class="card-desc">Beskriver <strong style="color:var(--text-2);">hvad systemet skal måle og rapportere</strong> — fx andel rene besøg og gennemsnitlig rengøringstid. 6 nøgletal er relevante for denne demo.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FR krav ── -->
+  <div class="section">
+    <div class="section-title">Funktionelle krav (FR)</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Krav</th>
+            <th>Hvad kræves der?</th>
+            <th>Status</th>
+            <th>Bemærkning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>FR-01</code></td>
+            <td>Et anonymt besøg starter, når nogen scanner sit kort</td>
+            <td><span class="status status-part">🔶 Simuleret</span></td>
+            <td>Testmotoren simulerer kortscanning automatisk — ingen fysisk kortlæser til rådighed</td>
+          </tr>
+          <tr>
+            <td><code>FR-02</code></td>
+            <td>Besøget afsluttes, når døren åbnes igen eller ved timeout</td>
+            <td><span class="status status-part">🔶 Simuleret</span></td>
+            <td>Besøget afsluttes via en timer — ingen fysisk dørsensor til rådighed</td>
+          </tr>
+          <tr>
+            <td><code>FR-03</code></td>
+            <td>Kortets ID gemmes krypteret — ingen persondata</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Et anonymt token gemmes. Ingen navn, ingen personoplysninger</td>
+          </tr>
+          <tr>
+            <td><code>FR-10</code></td>
+            <td>Et "før"-billede tages, når besøget starter</td>
+            <td><span class="status status-part">🔶 Simuleret</span></td>
+            <td>Billeddata (score og sikkerhed) genereres af testmotoren — intet fysisk kamera</td>
+          </tr>
+          <tr>
+            <td><code>FR-11</code></td>
+            <td>Et "efter"-billede tages, når besøget slutter</td>
+            <td><span class="status status-part">🔶 Simuleret</span></td>
+            <td>Som FR-10 — begge billedpunkter er repræsenteret i databasen</td>
+          </tr>
+          <tr>
+            <td><code>FR-12</code></td>
+            <td>Ingen løbende videostream — kun snapshots</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Live-feed er aktivt blokeret i koden og returnerer en fejl, hvis nogen forsøger at tilgå det</td>
+          </tr>
+          <tr>
+            <td><code>FR-20</code></td>
+            <td>Systemet sammenligner "før" og "efter" og beregner en score</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Tilstandsvurderingen beregner score, difference og sikkerhedsprocent</td>
+          </tr>
+          <tr>
+            <td><code>FR-21</code></td>
+            <td>Forværring udløser automatisk en rengøringsopgave med prioritet</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Opgaven oprettes med enten lav eller høj prioritet afhængigt af graden af forværring</td>
+          </tr>
+          <tr>
+            <td><code>FR-22</code></td>
+            <td>Systemets sikkerhedsprocent vises og bruges ved usikre vurderinger</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Vist som "Systemsikkerhed" i dashboardet. Lav sikkerhed → markeres til manuel kontrol</td>
+          </tr>
+          <tr>
+            <td><code>FR-30</code></td>
+            <td>Et live-dashboard viser toiletstatus og score i realtid</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Dashboard med farvekodet status, score-ring og live-opdateringer</td>
+          </tr>
+          <tr>
+            <td><code>FR-31</code></td>
+            <td>Rengøringsteamet har en prioriteret opgaveliste med handlingsknapper</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>"Er på vej" / "Rengøring færdig" / "Intet behov" — alle tre handlinger er implementeret</td>
+          </tr>
+          <tr>
+            <td><code>FR-40</code></td>
+            <td>Historiske data og en daglig konditionsgraf er tilgængelige</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>7 dages historik seedet i databasen. Graf viser timedata for den aktuelle dag</td>
+          </tr>
+          <tr>
+            <td><code>FR-41</code></td>
+            <td>Systemet understøtter flere lokationer</td>
+            <td><span class="status status-part">🔶 Delvist</span></td>
+            <td>Lokationsfeltet findes i databasen, men dashboardet filtrerer ikke på lokation endnu</td>
+          </tr>
+          <tr>
+            <td><code>FR-50</code></td>
+            <td>Ugentlig KPI-rapport kan genereres</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Rapport tilgængelig via API og vist i dashboardets ugeoversigt</td>
+          </tr>
+          <tr>
+            <td><code>FR-51</code></td>
+            <td>Rapporter genereres automatisk efter en fast plan</td>
+            <td><span class="status status-no">❌ Ikke implementeret</span></td>
+            <td>Eksport sker i stedet manuelt ved behov — ingen automatisk planlægning</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── NFR krav ── -->
+  <div class="section">
+    <div class="section-title">Ikke-funktionelle krav (NFR)</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Krav</th><th>Hvad kræves der?</th><th>Mål</th><th>Status</th><th>Bemærkning</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>NFR-01</code></td>
+            <td>Systemet svarer hurtigt</td>
+            <td>Under 500 ms</td>
+            <td><span class="status status-part">🔶 Forventet</span></td>
+            <td>Ikke målt med automatisk test — lokal database forventes at svare langt under grænsen</td>
+          </tr>
+          <tr>
+            <td><code>NFR-02</code></td>
+            <td>Dashboardet vises hurtigt</td>
+            <td>Under 100 ms</td>
+            <td><span class="status status-part">🔶 Forventet</span></td>
+            <td>Ikke målt — moderne React-app med lokal API forventes at overholde kravet</td>
+          </tr>
+          <tr>
+            <td><code>NFR-03</code></td>
+            <td>Systemet er oppe næsten altid</td>
+            <td>99,5 % oppetid</td>
+            <td><span class="status status-no">❌ Ikke målt</span></td>
+            <td>Demo-system — ingen overvågning af oppetid er sat op</td>
+          </tr>
+          <tr>
+            <td><code>NFR-06</code></td>
+            <td>Usikre vurderinger håndteres med en fallback</td>
+            <td>—</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Lav sikkerhedsprocent medfører status "Kontrollér" i stedet for en automatisk beslutning</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── KPI ── -->
+  <div class="section">
+    <div class="section-title">Nøgletal (KPI) — hvad måler systemet?</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Nøgletal</th><th>Hvad viser det?</th><th>Status</th><th>Hvor ses det?</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>KPI-O1</code></td>
+            <td>Antal klager fra brugere</td>
+            <td><span class="status status-no">❌ Ikke i scope</span></td>
+            <td>Ikke implementeret i denne prototype</td>
+          </tr>
+          <tr>
+            <td><code>KPI-O2</code></td>
+            <td>Andel besøg der resulterer i forværring (per 100 besøg)</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Dashboardets ugeoversigt — "Rengøringsbehov"</td>
+          </tr>
+          <tr>
+            <td><code>KPI-O3</code></td>
+            <td>Gennemsnitlig tid fra opgave oprettet til rengøring færdig</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Dashboardets ugeoversigt — "Gns. rengøringstid"</td>
+          </tr>
+          <tr>
+            <td><code>KPI-O4</code></td>
+            <td>Andel besøg uden rengøringsbehov</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Dashboardets ugeoversigt — "Rene besøg"</td>
+          </tr>
+          <tr>
+            <td><code>KPI-O5</code></td>
+            <td>Antal åbne rengøringsopgaver lige nu</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Dashboardets ugeoversigt + opgavelistens tæller</td>
+          </tr>
+          <tr>
+            <td><code>KPI-O6</code></td>
+            <td>Samlet antal besøg i ugen</td>
+            <td><span class="status status-ok">✅ Opfyldt</span></td>
+            <td>Dashboardets ugeoversigt — "Besøg denne uge"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

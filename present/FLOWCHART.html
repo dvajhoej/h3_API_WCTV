@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCTV — Besøgsforløb</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-home">
+    <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+      <rect x="2" y="8" width="28" height="18" rx="3" stroke="#3b82f6" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="5" stroke="#60a5fa" stroke-width="1.8"/>
+      <circle cx="16" cy="17" r="2" fill="#3b82f6"/>
+      <rect x="12" y="4" width="8" height="5" rx="1.5" stroke="#475569" stroke-width="1.5"/>
+      <circle cx="25" cy="12" r="1.5" fill="#22c55e"/>
+    </svg>
+    WCTV
+  </a>
+  <a href="overblik.html">Om projektet</a>
+  <a href="arkitektur.html">Systemet</a>
+  <a href="FLOWCHART.html" class="active">Besøgsforløb</a>
+  <a href="DB_RELATIONER.html">Database</a>
+  <a href="DATAFLOW_DB.html">Dataflow</a>
+  <a href="krav.html">Krav</a>
+  <a href="demo.html">Demo</a>
+</nav>
+
+<div class="page-wide">
+
+  <div class="hero">
+    <span class="hero-tag">Besøgsforløb</span>
+    <h1>Hvad sker der, fra nogen scanner kortet til toilettet er rent igen?</h1>
+    <p>Diagrammet herunder viser hele forløbet trin for trin — med to mulige udfald afhængigt af, om toilettet er blevet snavset.</p>
+  </div>
+
+  <!-- ── Farveguide ── -->
+  <div class="section">
+    <div class="section-title">Farveforklaring</div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:var(--text-3);">
+        <span style="width:14px;height:14px;border-radius:3px;background:#14532d;border:1px solid #22c55e;flex-shrink:0;"></span>
+        Hardware og systemhandlinger
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:var(--text-3);">
+        <span style="width:14px;height:14px;border-radius:3px;background:#312e81;border:1px solid #818cf8;flex-shrink:0;"></span>
+        Live-beskeder til dashboardet
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:var(--text-3);">
+        <span style="width:14px;height:14px;border-radius:3px;background:#1c1917;border:1px solid #78716c;flex-shrink:0;"></span>
+        Dashboardet opdateres
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:var(--text-3);">
+        <span style="width:14px;height:14px;border-radius:3px;background:#7c2d12;border:1px solid #f97316;flex-shrink:0;"></span>
+        Rengøringsopgave oprettet
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Diagram ── -->
+  <div class="section">
+    <div class="diagram-card">
+      <div class="diagram-label">Komplet besøgsforløb — klik og zoom i browseren for detaljer</div>
+      <div class="mermaid">
+flowchart TD
+    A(["👤 Bruger nærmer sig toilettet"])
+    B["🪪 Adgangskort scannes"]
+    C["📋 Anonymt besøg registreres\nEt krypteret ID gemmes — ingen persondata"]
+    D["📸 'Før'-billede tages\nKameraet aktiveres ved dørlukning"]
+    E[/"🚪 Brugeren anvender toilettet"/]
+    F["📸 'Efter'-billede tages\nKameraet aktiveres, når døren åbnes"]
+    G["⏱️ Besøget afsluttes\nTidspunkt gemmes"]
+    H["🤖 Systemet sammenligner billederne\nEr toilettet mere snavset end før?"]
+    FORK{{"Forværring\nregistreret?"}}
+    OK["✅ Toiletstatus opdateres\nIngen handling nødvendig"]
+    SIG_OK["📡 Dashboard opdateres\nautomatisk"]
+    DASH_OK["🟢 Toiletkortet\nvises i grøn"]
+    DONE1(["✔ Forløb afsluttet"])
+    TRIG["🔴 Rengøringsopgave oprettes\nMed prioritet: lav eller høj"]
+    SIG_T["📡 Dashboard opdateres\nautomatisk"]
+    DASH_T["🔔 Ny opgave\nvises på listen"]
+    ACK["👷 Rengøringsteamet\nser opgaven"]
+    FORK2{{"Hvad gør\nteamet?"}}
+    A2["✋ Trykker 'Er på vej'\nOpgaven markeres som igangværende"]
+    CLEAN["🧹 Rengøring\nudføres"]
+    COMPLETE["✅ Trykker 'Rengøring færdig'\nKvittering gemmes — toilet nulstilles"]
+    SIG_C["📡 Dashboard opdateres\nautomatisk"]
+    DASH_C["🟢 Opgave fjernet\nToiletkort grønt igen"]
+    DONE2(["✔ Forløb afsluttet"])
+    FP["🚫 Trykker 'Intet behov'\nRegistreres som fejlvurdering"]
+    DONE3(["✔ Forløb afsluttet"])
+
+    A --> B --> C --> D --> E --> F --> G --> H --> FORK
+    FORK -- Nej --> OK --> SIG_OK --> DASH_OK --> DONE1
+    FORK -- Ja  --> TRIG --> SIG_T --> DASH_T --> ACK --> FORK2
+    FORK2 -- Påtager sig opgaven --> A2 --> CLEAN --> COMPLETE --> SIG_C --> DASH_C --> DONE2
+    FORK2 -- Fejlvurdering       --> FP --> DONE3
+
+    classDef hw    fill:#14532d,stroke:#22c55e,color:#bbf7d0
+    classDef sig   fill:#312e81,stroke:#818cf8,color:#c7d2fe
+    classDef dash  fill:#1c1917,stroke:#78716c,color:#d6d3d1
+    classDef ok    fill:#14532d,stroke:#22c55e,color:#bbf7d0
+    classDef warn  fill:#7c2d12,stroke:#f97316,color:#fed7aa
+    classDef dec   fill:#1e293b,stroke:#60a5fa,color:#e2e8f0
+    classDef term  fill:#0f172a,stroke:#475569,color:#94a3b8
+
+    class A,B,C,D,F,G,H,A2,CLEAN,COMPLETE,FP hw
+    class SIG_OK,SIG_T,SIG_C sig
+    class DASH_OK,DASH_T,DASH_C dash
+    class OK,DONE1,DONE2,DONE3 ok
+    class TRIG warn
+    class FORK,FORK2 dec
+    class E term
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Trin-oversigt ── -->
+  <div class="section">
+    <div class="section-title">Trin-for-trin forklaring</div>
+    <div class="step-list">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Kortscanning starter et anonymt besøg</div><div class="step-desc">Adgangskortets ID krypteres, inden det gemmes. Der er ingen forbindelse til en bestemt person.</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Kameraet tager et "før"-billede</div><div class="step-desc">Aktiveres automatisk, når døren lukkes bag brugeren. Billedet vurderes som en score fra 0–100.</div></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Brugeren anvender toilettet</div><div class="step-desc">Systemet venter — ingen overvågning mens besøget står på.</div></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Kameraet tager et "efter"-billede</div><div class="step-desc">Aktiveres, når døren åbnes igen. Systemet sammenligner nu de to scores.</div></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Systemet vurderer, om toilettet er forværret</div><div class="step-desc">78 % af besøg er rene. Ved forværring oprettes en rengøringsopgave automatisk med prioritet og sikkerhedsprocent.</div></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-body"><div class="step-title">Dashboardet opdaterer sig selv øjeblikkeligt</div><div class="step-desc">En live-besked sendes til alle skærme — uden genindlæsning. Toiletkortet skifter farve, og en ny opgave vises på listen.</div></div></div>
+      <div class="step"><div class="step-num">7</div><div class="step-body"><div class="step-title">Rengøringsteamet kvitterer og afslutter opgaven</div><div class="step-desc">Teamet trykker "Er på vej" og siden "Rengøring færdig". En kvittering gemmes, og toiletstatus nulstilles til grøn.</div></div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true, theme: 'dark',
+    themeVariables: {
+      background: '#0f172a', primaryColor: '#1e3a5f',
+      primaryTextColor: '#e2e8f0', primaryBorderColor: '#3b82f6',
+      lineColor: '#475569', edgeLabelBackground: '#1e293b',
+      fontSize: '13px', fontFamily: "'Segoe UI', system-ui, sans-serif"
+    },
+    flowchart: { curve: 'basis', useMaxWidth: true }
+  });
+</script>
+</body>
+</html>

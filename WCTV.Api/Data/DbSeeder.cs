@@ -251,13 +251,13 @@ public static class DbSeeder
             delta          = (float)(rng.NextDouble() * 0.10 - 0.05);
             result         = "kraever_gennemgang";
         }
-        else if (roll < 0.15)
+        else if (roll < 0.10)
         {
             delta          = -(0.26f + (float)rng.NextDouble() * 0.24f);
             result         = "forvaerring";
             triggerSeverity = "forvaerring";
         }
-        else if (roll < 0.35)
+        else if (roll < 0.22)
         {
             delta          = -(0.10f + (float)rng.NextDouble() * 0.15f);
             result         = "let_forvaerring";
